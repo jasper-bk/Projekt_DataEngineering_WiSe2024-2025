@@ -1,0 +1,290 @@
+
+\documentclass[%
+pdftex,
+oneside,			% Einseitiger Druck.
+11pt,				% Schriftgroesse
+parskip=half,		% Halbe Zeile Abstand zwischen Absätzen.
+%	topmargin = 10pt,	% Abstand Seitenrand (Std:1in) zu Kopfzeile [laut log: unused]
+headheight = 12pt,	% Höhe der Kopfzeile
+%	headsep = 30pt,	% Abstand zwischen Kopfzeile und Text Body  [laut log: unused]
+headsepline,		% Linie nach Kopfzeile.
+footsepline,		% Linie vor Fusszeile.
+footheight = 16pt,	% Höhe der Fusszeile
+abstracton,		% Abstract Überschriften
+DIV=calc,		% Satzspiegel berechnen
+BCOR=8mm,		% Bindekorrektur links: 8mm
+headinclude=false,	% Kopfzeile nicht in den Satzspiegel einbeziehen
+footinclude=false,	% Fußzeile nicht in den Satzspiegel einbeziehen
+listof=totoc,		% Abbildungs-/ Tabellenverzeichnis im Inhaltsverzeichnis darstellen
+toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
+]{scrreprt}	% Koma-Script report-Klasse, fuer laengere Bachelorarbeiten alternativ auch: scrbook
+
+
+\def \titel {Konzeption -- Entwicklung eines real-time Backends für eine datenintensive Applikation}
+\def \arbeit {Seminararbeit}
+\def \autor {Jasper Bremenkamp}
+\def \abschluss {Master of Science}
+\def \studiengang {Data Science}
+\def \datumAbgabe {\today}
+\def \modul {Projekt: Data Engineering}
+\def \matrikelnr {92125193}
+\def \tutor {Prof. Dr. Max Pumperla}
+
+\def \seitenrand {2cm}
+
+% PDF Einstellungen
+\usepackage{hyperref}
+
+\hypersetup{ 
+    unicode = true,
+    pdftitle={\titel},
+    pdfauthor={\autor},
+    pdfsubject={\arbeit},
+    pdfcreator={pdflatex, LaTeX with KOMA-Script},
+    pdfpagemode=UseOutlines, 		% Beim Oeffnen Inhaltsverzeichnis anzeigen
+    pdfdisplaydoctitle=true, 		% Dokumenttitel statt Dateiname anzeigen.
+    pdflang={de}, 			% Sprache des Dokuments.
+    hidelinks
+}
+
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry} % margins	% Seitenränder und Abstände
+\usepackage[activate]{microtype} %Zeilenumbruch und mehr
+\usepackage[onehalfspacing]{setspace}
+\usepackage{makeidx}
+\usepackage[autostyle=true,german=quotes]{csquotes}
+\MakeOuterQuote{"} % Für deutsche Anführungszeichen 
+\usepackage{longtable}
+\usepackage{enumitem}	% mehr Optionen bei Aufzählungen
+\usepackage{graphicx}
+\usepackage{pdfpages}   % zum Einbinden von PDFs
+\usepackage{xcolor} 	% für HTML-Notation
+\usepackage{float}
+\usepackage{array}
+\usepackage{calc}		% zum Rechnen (Bildtabelle in Deckblatt)
+\usepackage[right]{eurosym}
+\usepackage{wrapfig}
+\usepackage{pgffor} % für automatische Kapiteldateieinbindung
+\usepackage[perpage, hang, multiple, stable]{footmisc} % Fussnoten
+\usepackage[printonlyused]{acronym} % falls gewünscht kann die Option footnote eingefügt werden, dann wird die Erklärung nicht inline sondern in einer Fußnote dargestellt
+\usepackage{listings}
+\usepackage{bookmark}
+\usepackage[english, ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{scrhack}
+\usepackage{txfonts} % Use a Times-new-roman open-source clone
+
+
+    %%%%%%% Neues Design %%%%%%%%%%%
+    \setkomafont{chapter}{\Large} 
+    \setkomafont{section}{\large}
+    \setkomafont{subsection}{\large} 
+
+    %\renewcommand*\chapterheadstartvskip{\vspace*{-0cm}} %Kapitel nach oben verschieben
+
+    \addtolength{\footskip}{-0.7cm}% foot larger by 0,7 cm  (Raises the page number)
+    \setlength{\parindent}{6pt} % Indent at start of paragraphs  6pt
+
+    \renewcommand\thesection{\arabic{section}}
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Notizen. Einsatz mit \todo{Notiz} oder \todo[inline]{Notiz}. 
+\usepackage[obeyFinal,backgroundcolor=yellow,linecolor=black]{todonotes}
+% Alle Notizen ausblenden mit der Option "final" in \documentclass[...] oder durch das auskommentieren folgender Zeile
+% \usepackage[disable]{todonotes}
+
+% Kommentarumgebung. Einsatz mit \comment{}. Alle Kommentare ausblenden mit dem Auskommentieren der folgenden und dem aktivieren der nächsten Zeile.
+\newcommand{\comment}[1]{\par {\bfseries \color{blue} #1 \par}} %Kommentar anzeigen
+
+% der neue Zitierstil ist Käse
+\global\def\VAlterZitierstil{true}
+
+\global\def\VTrueValue{true}
+
+\ifx\VAlterZitierstil\VTrueValue
+    \usepackage[
+        backend=bibtex,     % empfohlen. Falls biber Probleme macht: bibtex
+        bibwarn=true,
+        bibencoding=utf8,   % wenn .bib in utf8, sonst ascii
+        sortlocale=de_DE,
+        sorting=none,
+        style=numeric-comp
+    ]{biblatex}
+
+    \addbibresource{bibliographie.bib}
+\else
+    % New IUBH Cite Style / Old Cite style below
+    \usepackage{natbib}
+    \setcitestyle{aysep={}} % remove comma as delimiter 
+\fi
+
+
+\begin{document}
+
+\pagenumbering{Roman}
+
+\begin{titlepage}
+    \pdfbookmark{\titel}{}
+    \begin{longtable}{p{7cm} p{12cm}}
+        {\raisebox{\ht\strutbox-\totalheight}{\includegraphics[height=3cm]{assets/iu.png}}}
+    \end{longtable}
+    \enlargethispage{20mm}
+    \begin{center}
+        \vspace*{12mm}	{\LARGE\textbf \titel }\\
+        \vspace*{12mm}	{\large\textbf \arbeit}\\
+        \vspace*{12mm}	Prüfungsleistung für den\\
+        \vspace*{3mm}		{\textbf \abschluss}\\
+        \vspace*{12mm}	des Studiengangs \studiengang\\
+    \vspace*{3mm}		an der Internationalen Hochschule\\
+        \vspace*{12mm}	von\\
+        \vspace*{3mm}		{\large\textbf \autor}\\
+        \vspace*{12mm}	\datumAbgabe
+    \end{center}
+    \vfill
+    \begin{spacing}{1.2}
+    \begin{tabbing}
+        mmmmmmmmmmmmmmmmmmmmmmmmmm             \= \kill
+        \textbf{Kursbezeichnung} \> \modul\\
+        \textbf{Matrikelnummer} \> \matrikelnr\\
+        \textbf{Tutor} \> \tutor\\
+    \end{tabbing}
+    \end{spacing}
+\end{titlepage}
+
+\newpage
+
+%Abbildungsverzeichnis
+%\cleardoublepage %To-Do: Wieder hinzufügen, wenn sinnvolle Grafiken eingefügt werden
+%\listoffigures
+
+%Tabellenverzeichnis
+%\cleardoublepage
+%\listoftables
+
+%\chapter{Konzeption} %evtl weg lassen und section sind dann chapter
+\pagenumbering{arabic}
+
+% \comment{Inhalt: \\
+% Beschreibung des Hintergrund-Szenarios \\
+% Dokumentierung von Informationslücken \\
+% Strategie zur Beschaffung/Füllung der Informationslücken \\
+% }
+
+% \comment{Anforderungen: \\
+% Nicht mehr als 2 Seiten
+% Diagramme und Schaubilder nach Ermessen einsetzbar
+% }
+
+\section{Szenario}
+
+    Die FreshMart AG, eine Kette von Lebensmittelgeschäften, steht vor der Herausforderung, eine \textbf{datengesteuerte Entscheidungsfindung} in ihre Betriebsprozesse zu integrieren, um die Effizienz zu steigern, Kosten zu senken und die Kundenzufriedenheit zu verbessern. 
+    Die bestehende Infrastruktur, die aus Kassensystemen, Lagerverwaltungssystemen und Kundendatenbanken besteht, wird derzeit noch hauptsächlich zur Erfassung und Speicherung von Daten genutzt, jedoch nicht für fortschrittliche Analysen oder Echtzeit-Entscheidungen.
+
+    Das Ziel des Projekts ist es, eine Dateninfrastruktur zu entwickeln, die in der Lage ist, kontinuierlich große Mengen an Echtzeitdaten zu verarbeiten und darauf basierend automatisierte Prozesse zu ermöglichen. Der Schwerpunkt liegt auf der \textbf{automatisierten Bestandsverwaltung}, dynamischen Preisgestaltung und personalisierten Kundenangeboten. 
+    Die Automatisierung soll sicherstellen, dass Nachbestellungen optimiert werden, indem Verkaufsdaten, Lagerbestände und saisonale Schwankungen berücksichtigt werden.
+
+    Die Kassensysteme in den Filialen erfassen kontinuierlich Transaktionsdaten, die durch eine zentrale Datenverarbeitungsarchitektur aggregiert und in Echtzeit analysiert werden sollen. 
+    Die wichtigsten Datenquellen umfassen Verkaufsdaten, Lagerbestandsdaten und CRM-Daten, die bereits in den Systemen vorhanden sind. 
+    Diese Daten werden genutzt, um eine \textbf{automatisierte Nachbestellung} auszulösen, sobald bestimmte Bestandsgrenzen erreicht werden, und um dynamische Preisanpassungen basierend auf der Nachfrage durchzuführen.
+
+    Der Kern des Systems ist ein Echtzeit-Reporting, das es dem Management ermöglicht, sowohl auf Filial- als auch auf Unternehmensniveau Einblicke in die aktuellen Lagerbestände, Verkaufszahlen und Nachfrageentwicklungen zu erhalten. 
+    Zusätzlich sollen Machine Learning-Algorithmen genutzt werden, um \textbf{Verkaufsprognosen} zu erstellen und darauf basierend gezielte Maßnahmen zu ergreifen.
+
+    Die neue Infrastruktur wird vollständig in die bestehenden Systeme integriert und schrittweise in allen Filialen implementiert. 
+    Während der Einführungsphase wird der Fokus darauf liegen, sicherzustellen, dass das System stabil arbeitet und zuverlässige Entscheidungen in Echtzeit getroffen werden können. 
+    Neben den technischen Herausforderungen müssen auch \textbf{datenschutzrechtliche Anforderungen} berücksichtigt werden, insbesondere im Hinblick auf die Verarbeitung von Kundendaten. 
+    Die Einwilligung zur Nutzung von Daten wird vorausgesetzt und in Übereinstimmung mit den geltenden Datenschutzvorgaben, insbesondere der DSGVO, gehandhabt.
+
+    Abschließend verfolgt die FreshMart AG mit dieser neuen Dateninfrastruktur das Ziel, ihre internen Prozesse zu optimieren, indem Entscheidungsfindungen schneller und effizienter gestaltet werden, gleichzeitig die Lagerkosten gesenkt und die Kundenzufriedenheit durch individuellere Angebote erhöht wird.
+
+\section{Strategie}
+
+    Um die beschriebenen Ziele der FreshMart AG zu erreichen und eine effiziente Datenverarbeitungsarchitektur zu entwickeln, wird eine klar definierte und mehrstufige Strategie verfolgt. 
+    Diese Strategie legt die Grundprinzipien fest, die das Projekt leiten, und beschreibt den geplanten Entwicklungsprozess von der Konzeptionsphase bis zur vollständigen Implementierung des Systems.
+
+    \subsection{Modulare und skalierbare Architektur}
+
+        Ein zentrales Prinzip der Strategie ist der Aufbau einer \textbf{modularen und skalierbaren Architektur}, die auf einer Microservice-Architektur basiert. 
+        Durch die Verwendung von Kubernetes und Helm als \textbf{Infrastructure as Code (IaC)}-Werkzeuge wird die Bereitstellung und Verwaltung der Infrastruktur automatisiert, was die Skalierbarkeit und Wartbarkeit des Systems erheblich verbessert. 
+        Kubernetes ermöglicht das Orchestrieren der Microservices, um deren Skalierung und Fehlertoleranz zu gewährleisten. 
+        
+        Für die Containerisierung wird \textbf{Podman} anstelle von Docker verwendet, da es einige Vorteile bietet, wie z.B. Rootless Containers, die eine höhere Sicherheit ermöglichen. 
+        Podman kann nahtlos in die Kubernetes-Umgebung integriert werden und unterstützt die reibungslose Erstellung, Verwaltung und Verteilung der Microservices.
+
+        Die Architektur teilt das System in unabhängige Komponenten auf, wie die Datenaufnahme (data ingestion) und -verarbeitung, die von \textbf{Apache Kafka} als Nachrichten-Streaming-Plattform übernommen wird. Diese Modularität erleichtert die Skalierbarkeit des Systems, da einzelne Services nach Bedarf skaliert oder aktualisiert werden können, ohne dass die Stabilität des Gesamtsystems gefährdet wird.
+
+    \subsection{Schrittweise Einführung und Testing}
+
+        Die Implementierung erfolgt \textbf{schrittweise} in mehreren Phasen, um Risiken zu minimieren und eine kontinuierliche Verbesserung zu gewährleisten:
+
+        \begin{itemize}
+            \item \textbf{Phase 1: Konzeptionsphase} – In dieser Phase wird eine gründliche Analyse der bestehenden Systeme und der erforderlichen Technologien durchgeführt. 
+            Neben der Auswahl von Apache Kafka für die Datenaufnahme und Streaming wird die Infrastruktur mithilfe von Kubernetes und Helm definiert. 
+            Git in Verbindung mit der Plattform GitHub wird für die \textbf{Versionskontrolle} genutzt, um sicherzustellen, dass alle Änderungen am Code und an der Infrastruktur nachvollziehbar und reproduzierbar sind.
+            \item \textbf{Phase 2: Implementierung und Integration} – Die eigentliche Entwicklung der Microservices beginnt, einschließlich der Integration der Datenquellen wie Kassensysteme und Lagerverwaltung. 
+            Die ersten Services werden in Containern mithilfe von Podman entwickelt und in Kubernetes-Clustern bereitgestellt. 
+            Die Konfiguration und Bereitstellung der Infrastruktur erfolgt automatisiert durch Helm-Charts.
+            \item \textbf{Phase 3: Skalierung und Optimierung} – In dieser Phase wird das System auf größere Datenmengen skaliert und in den produktiven Betrieb überführt. 
+            Dabei steht die Optimierung der Datenströme und die Feinjustierung der Algorithmen im Vordergrund, um Echtzeit-Entscheidungen und Vorhersagen zu verbessern.
+        \end{itemize}
+
+    \subsection{Automatisierte Bestandsverwaltung}
+
+        Ein zentraler Aspekt des Systems ist die \textbf{automatisierte Bestandsverwaltung}. 
+        Das System wird kontinuierlich Verkaufs- und Lagerbestandsdaten über Apache Kafka sammeln und in Echtzeit verarbeiten. 
+        Sobald festgelegte Bestandsgrenzen erreicht werden, werden automatische Nachbestellungen ausgelöst. 
+        Durch die Modularität der Architektur kann dieser Service unabhängig skaliert und optimiert werden.
+
+        Die schrittweise Einführung dieser automatisierten Bestandsverwaltung beginnt in Pilotfilialen, um die Effizienz und Reaktionsfähigkeit auf saisonale und regionale Unterschiede zu testen. 
+        Durch den Einsatz von Kubernetes wird eine flexible Skalierung ermöglicht, um die steigenden Datenanforderungen in den verschiedenen Phasen des Rollouts zu bewältigen.
+
+    \subsection{Datenbasierte Entscheidungsfindung}
+
+        Die \textbf{datengestützte Entscheidungsfindung} wird durch Echtzeit-Datenanalysen ermöglicht, die es erlauben, auf aktuelle Entwicklungen in den Filialen zu reagieren. 
+        Mithilfe von Machine Learning-Algorithmen werden \textbf{Verkaufsprognosen} erstellt, die dynamische Preisanpassungen und personalisierte Angebote unterstützen.
+        Diese Algorithmen werden kontinuierlich mit den neuesten Verkaufs- und Lagerdaten trainiert, die über Kafka in das System eingespeist werden. 
+        Die Fähigkeit, in Echtzeit auf sich ändernde Daten zu reagieren, ist dabei der Schlüssel, um genaue Vorhersagen und fundierte Geschäftsentscheidungen zu ermöglichen.
+
+        Die Implementierung der Machine Learning-Algorithmen wird allerdings nicht im Rahmen dieser Arbeit behandelt, um den Rahmen nicht zu sprengen.
+        Im Fokus der Arbeit steht das Data Engineering.
+
+
+    \subsection{Integration und Datenquellen}
+
+        Die nahtlose Integration bestehender Systeme ist ein weiterer strategischer Fokus. 
+        FreshMart AG verfügt bereits über Kassensysteme und CRM-Systeme, die in die neue Dateninfrastruktur eingebunden werden sollen. 
+        Apache Kafka fungiert hierbei als zentrale Plattform für die Datenaufnahme, die eine konsistente und skalierbare Verarbeitung von Daten aus verschiedenen Quellen ermöglicht.
+
+        Diese Datenquellen werden schrittweise in die Infrastruktur integriert, um sicherzustellen, dass das System stabil arbeitet und die Datenströme effizient verarbeitet werden können.
+
+    \subsection{Datensicherheit und Datenschutz}
+
+        Ein zentraler Bestandteil der Strategie ist die Berücksichtigung von \textbf{Datensicherheit} und \textbf{Datenschutz}. 
+        Alle Kundendaten werden gemäß den Vorgaben der \textbf{Datenschutz-Grundverordnung (DSGVO)} verarbeitet. 
+        Die Speicherung und Verarbeitung der Daten erfolgt verschlüsselt, und es werden strenge Zugangskontrollen implementiert, um unbefugten Zugriff zu verhindern.
+
+        Um die Einhaltung der Datenschutzanforderungen zu gewährleisten, werden Sicherheitsmechanismen wie \textbf{verschlüsselte Datenübertragungen} und \textbf{regelmäßige Sicherheitsaudits} in die Infrastruktur integriert. Zudem sorgt das \textbf{Data Governance}-Framework dafür, dass der Umgang mit Daten klar geregelt und nachvollziehbar ist.
+
+    \subsection{Zusammenarbeit und Versionskontrolle}
+
+        Die enge Zusammenarbeit zwischen den internen IT-Teams der FreshMart AG und externen Experten ist ein entscheidender Erfolgsfaktor für das Projekt. 
+        Um die Arbeit effizient zu koordinieren und sicherzustellen, dass alle Änderungen nachvollziehbar sind, wird Git in Verbindung mit \textbf{GitHub} als Plattform für die Versionskontrolle verwendet. 
+        Dies ermöglicht eine klare Rückverfolgbarkeit der Änderungen und die kollaborative Entwicklung in verteilten Teams.
+
+        \textbf{Regelmäßige Feedback-Schleifen} und Tests während des gesamten Entwicklungsprozesses stellen sicher, dass das System kontinuierlich verbessert und an die spezifischen Anforderungen angepasst wird.
+
+    \subsection{Schlussfolgerung}
+
+        Die Strategie zur Entwicklung der neuen Dateninfrastruktur für FreshMart AG basiert auf einer modularen, skalierbaren Architektur, die den Einsatz von Kubernetes, Helm und Podman zur Sicherstellung der Skalierbarkeit, Wartbarkeit und Verfügbarkeit umfasst. 
+        Durch die Verwendung von Apache Kafka als zentrale Plattform für die Datenaufnahme und -verarbeitung sowie Machine Learning für datenbasierte Vorhersagen werden die internen Abläufe effizienter gestaltet. Gleichzeitig wird höchsten Wert auf Datensicherheit und Datenschutz gelegt, um den gesetzlichen Anforderungen gerecht zu werden.
+
+
+
+
+\ifx\VAlterZitierstil\VTrueValue
+    \printbibliography
+\else
+    \bibliographystyle{iubh}
+    \bibliography{bibliographie.bib}
+\fi
+\end{document}
