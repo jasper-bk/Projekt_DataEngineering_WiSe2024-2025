@@ -35,7 +35,7 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
 % PDF Einstellungen
 \usepackage{hyperref}
 
-\hypersetup{ 
+\hypersetup{
     unicode = true,
     pdftitle={\titel},
     pdfauthor={\autor},
@@ -52,7 +52,7 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
 \usepackage[onehalfspacing]{setspace}
 \usepackage{makeidx}
 \usepackage[autostyle=true,german=quotes]{csquotes}
-\MakeOuterQuote{"} % Für deutsche Anführungszeichen 
+\MakeOuterQuote{"} % Für deutsche Anführungszeichen
 \usepackage{longtable}
 \usepackage{enumitem}	% mehr Optionen bei Aufzählungen
 \usepackage{graphicx}
@@ -75,9 +75,9 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
 
 
     %%%%%%% Neues Design %%%%%%%%%%%
-    \setkomafont{chapter}{\Large} 
+    \setkomafont{chapter}{\Large}
     \setkomafont{section}{\large}
-    \setkomafont{subsection}{\large} 
+    \setkomafont{subsection}{\large}
 
     %\renewcommand*\chapterheadstartvskip{\vspace*{-0cm}} %Kapitel nach oben verschieben
 
@@ -88,7 +88,7 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Notizen. Einsatz mit \todo{Notiz} oder \todo[inline]{Notiz}. 
+% Notizen. Einsatz mit \todo{Notiz} oder \todo[inline]{Notiz}.
 \usepackage[obeyFinal,backgroundcolor=yellow,linecolor=black]{todonotes}
 % Alle Notizen ausblenden mit der Option "final" in \documentclass[...] oder durch das auskommentieren folgender Zeile
 % \usepackage[disable]{todonotes}
@@ -115,7 +115,7 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
 \else
     % New IUBH Cite Style / Old Cite style below
     \usepackage{natbib}
-    \setcitestyle{aysep={}} % remove comma as delimiter 
+    \setcitestyle{aysep={}} % remove comma as delimiter
 \fi
 
 
@@ -177,108 +177,128 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
 
 \section{Szenario}
 
-    Die FreshMart AG, eine Kette von Lebensmittelgeschäften, steht vor der Herausforderung, eine \textbf{datengesteuerte Entscheidungsfindung} in ihre Betriebsprozesse zu integrieren, um die Effizienz zu steigern, Kosten zu senken und die Kundenzufriedenheit zu verbessern. 
-    Die bestehende Infrastruktur, die aus Kassensystemen, Lagerverwaltungssystemen und Kundendatenbanken besteht, wird derzeit noch hauptsächlich zur Erfassung und Speicherung von Daten genutzt, jedoch nicht für fortschrittliche Analysen oder Echtzeit-Entscheidungen.
+    Die Frischmarkt AG, eine Kette von Lebensmittelgeschäften, steht vor der Aufgabe, datengestützte Entscheidungsfindung in ihre Betriebsprozesse zu integrieren, um Effizienz zu steigern, Kosten zu senken und die Kundenzufriedenheit zu verbessern.
+    Die derzeitige Infrastruktur, bestehend aus Kassensystemen, Lagerverwaltung und Kundendatenbanken, wird hauptsächlich zur Datenspeicherung genutzt, jedoch nicht für fortschrittliche Analysen oder Echtzeit-Entscheidungen.
 
-    Das Ziel des Projekts ist es, eine Dateninfrastruktur zu entwickeln, die in der Lage ist, kontinuierlich große Mengen an Echtzeitdaten zu verarbeiten und darauf basierend automatisierte Prozesse zu ermöglichen. Der Schwerpunkt liegt auf der \textbf{automatisierten Bestandsverwaltung}, dynamischen Preisgestaltung und personalisierten Kundenangeboten. 
-    Die Automatisierung soll sicherstellen, dass Nachbestellungen optimiert werden, indem Verkaufsdaten, Lagerbestände und saisonale Schwankungen berücksichtigt werden.
-
-    Die Kassensysteme in den Filialen erfassen kontinuierlich Transaktionsdaten, die durch eine zentrale Datenverarbeitungsarchitektur aggregiert und in Echtzeit analysiert werden sollen. 
-    Die wichtigsten Datenquellen umfassen Verkaufsdaten, Lagerbestandsdaten und CRM-Daten, die bereits in den Systemen vorhanden sind. 
-    Diese Daten werden genutzt, um eine \textbf{automatisierte Nachbestellung} auszulösen, sobald bestimmte Bestandsgrenzen erreicht werden, und um dynamische Preisanpassungen basierend auf der Nachfrage durchzuführen.
-
-    Der Kern des Systems ist ein Echtzeit-Reporting, das es dem Management ermöglicht, sowohl auf Filial- als auch auf Unternehmensniveau Einblicke in die aktuellen Lagerbestände, Verkaufszahlen und Nachfrageentwicklungen zu erhalten. 
-    Zusätzlich sollen Machine Learning-Algorithmen genutzt werden, um \textbf{Verkaufsprognosen} zu erstellen und darauf basierend gezielte Maßnahmen zu ergreifen.
-
-    Die neue Infrastruktur wird vollständig in die bestehenden Systeme integriert und schrittweise in allen Filialen implementiert. 
-    Während der Einführungsphase wird der Fokus darauf liegen, sicherzustellen, dass das System stabil arbeitet und zuverlässige Entscheidungen in Echtzeit getroffen werden können. 
-    Neben den technischen Herausforderungen müssen auch \textbf{datenschutzrechtliche Anforderungen} berücksichtigt werden, insbesondere im Hinblick auf die Verarbeitung von Kundendaten. 
-    Die Einwilligung zur Nutzung von Daten wird vorausgesetzt und in Übereinstimmung mit den geltenden Datenschutzvorgaben, insbesondere der DSGVO, gehandhabt.
-
-    Abschließend verfolgt die FreshMart AG mit dieser neuen Dateninfrastruktur das Ziel, ihre internen Prozesse zu optimieren, indem Entscheidungsfindungen schneller und effizienter gestaltet werden, gleichzeitig die Lagerkosten gesenkt und die Kundenzufriedenheit durch individuellere Angebote erhöht wird.
+    Das Ziel des Projekts ist der Aufbau einer Dateninfrastruktur, die in der Lage ist, kontinuierlich große Mengen an Echtzeitdaten zu verarbeiten und automatisierte Prozesse zu ermöglichen.
+    Ein Schwerpunkt liegt auf der automatisierten Bestandsverwaltung, dynamischen Preisgestaltung und personalisierten Angeboten.
+    Automatisierte Nachbestellungen sollen auf Grundlage von Verkaufsdaten, Lagerbeständen und saisonalen Schwankungen ausgelöst werden.
 
 \section{Strategie}
 
-    Um die beschriebenen Ziele der FreshMart AG zu erreichen und eine effiziente Datenverarbeitungsarchitektur zu entwickeln, wird eine klar definierte und mehrstufige Strategie verfolgt. 
-    Diese Strategie legt die Grundprinzipien fest, die das Projekt leiten, und beschreibt den geplanten Entwicklungsprozess von der Konzeptionsphase bis zur vollständigen Implementierung des Systems.
+    Um diese Ziele zu erreichen, verfolgt die Frischmarkt AG eine mehrstufige Strategie zur Entwicklung einer effizienten Datenverarbeitungsarchitektur.
 
-    \subsection{Modulare und skalierbare Architektur}
+    %\subsection{Modulare und skalierbare Architektur}
 
-        Ein zentrales Prinzip der Strategie ist der Aufbau einer \textbf{modularen und skalierbaren Architektur}, die auf einer Microservice-Architektur basiert. 
-        Durch die Verwendung von Kubernetes und Helm als \textbf{Infrastructure as Code (IaC)}-Werkzeuge wird die Bereitstellung und Verwaltung der Infrastruktur automatisiert, was die Skalierbarkeit und Wartbarkeit des Systems erheblich verbessert. 
-        Kubernetes ermöglicht das Orchestrieren der Microservices, um deren Skalierung und Fehlertoleranz zu gewährleisten. 
-        
-        Für die Containerisierung wird \textbf{Podman} anstelle von Docker verwendet, da es einige Vorteile bietet, wie z.B. Rootless Containers, die eine höhere Sicherheit ermöglichen. 
-        Podman kann nahtlos in die Kubernetes-Umgebung integriert werden und unterstützt die reibungslose Erstellung, Verwaltung und Verteilung der Microservices.
+    Ein zentrales Prinzip der Strategie ist der Aufbau einer modularen und skalierbaren Architektur auf Basis einer Microservice-Architektur.
+    Kubernetes und Helm werden als Werkzeuge für Infrastructure as Code (IaC) verwendet, um die Skalierbarkeit und Wartbarkeit des Systems zu gewährleisten.
+    Kubernetes orchestriert die Microservices, um ihre Skalierung und Fehlertoleranz zu gewährleisten.
 
-        Die Architektur teilt das System in unabhängige Komponenten auf, wie die Datenaufnahme (data ingestion) und -verarbeitung, die von \textbf{Apache Kafka} als Nachrichten-Streaming-Plattform übernommen wird. Diese Modularität erleichtert die Skalierbarkeit des Systems, da einzelne Services nach Bedarf skaliert oder aktualisiert werden können, ohne dass die Stabilität des Gesamtsystems gefährdet wird.
+    Für die Containerisierung wird Podman anstelle der mehr bekannten Docker Container Engine verwendet, da Podman keinerlei proprietäre Einschränkungen wie Docker hat und außerdem einige Vorteile gegenüber Docker bietet, wie z. B. Rootless Containers, welche die Sicherheit erhöhen.
+    Podman kann problemlos im Zusammenhang mit Kubernetes-Umgebungen genutzt werden und unterstützt ebenfalls die wesentlichen Features, die Docker bietet.
 
-    \subsection{Schrittweise Einführung und Testing}
+    Die Architektur teilt das System in unabhängige Komponenten auf, z.B. Datenaufnahme und -verarbeitung, die von Apache Kafka als Nachrichten-Streaming-Plattform übernommen wird.
+    Diese Modularität erleichtert die Skalierbarkeit des Systems, da einzelne Services unabhängig skaliert oder aktualisiert werden können.
 
-        Die Implementierung erfolgt \textbf{schrittweise} in mehreren Phasen, um Risiken zu minimieren und eine kontinuierliche Verbesserung zu gewährleisten:
+    %\subsection{Schrittweise Einführung und Testing}
+    %Die Implementierung erfolgt in mehreren Phasen, um Risiken zu minimieren und eine kontinuierliche Verbesserung zu ermöglichen:
 
-        \begin{itemize}
-            \item \textbf{Phase 1: Konzeptionsphase} – In dieser Phase wird eine gründliche Analyse der bestehenden Systeme und der erforderlichen Technologien durchgeführt. 
-            Neben der Auswahl von Apache Kafka für die Datenaufnahme und Streaming wird die Infrastruktur mithilfe von Kubernetes und Helm definiert. 
-            Git in Verbindung mit der Plattform GitHub wird für die \textbf{Versionskontrolle} genutzt, um sicherzustellen, dass alle Änderungen am Code und an der Infrastruktur nachvollziehbar und reproduzierbar sind.
-            \item \textbf{Phase 2: Implementierung und Integration} – Die eigentliche Entwicklung der Microservices beginnt, einschließlich der Integration der Datenquellen wie Kassensysteme und Lagerverwaltung. 
-            Die ersten Services werden in Containern mithilfe von Podman entwickelt und in Kubernetes-Clustern bereitgestellt. 
-            Die Konfiguration und Bereitstellung der Infrastruktur erfolgt automatisiert durch Helm-Charts.
-            \item \textbf{Phase 3: Skalierung und Optimierung} – In dieser Phase wird das System auf größere Datenmengen skaliert und in den produktiven Betrieb überführt. 
-            Dabei steht die Optimierung der Datenströme und die Feinjustierung der Algorithmen im Vordergrund, um Echtzeit-Entscheidungen und Vorhersagen zu verbessern.
-        \end{itemize}
+    %\begin{itemize}
+    %    \item \textbf{Phase 1: Konzeptionsphase} – In dieser Phase wird eine gründliche Analyse der bestehenden Systeme und der erforderlichen Technologien durchgeführt.
+    %    Neben der Auswahl von Apache Kafka für die Datenaufnahme und das Streaming wird die Infrastruktur mithilfe von Kubernetes und Helm definiert.
+    %    GitHub wird für die Versionskontrolle genutzt, um Nachvollziehbarkeit und Reproduzierbarkeit sicherzustellen.
+    %
+    %    \item \textbf{Phase 2: Implementierung und Integration} – Die eigentliche Entwicklung der Microservices beginnt, inklusive der Integration von Kassensystemen und Lagerverwaltung.
+    %    Da in dieser Phase noch kein Zugang zu den produktiven Systemen besteht, werden Mocks oder Fakes verwendet, die als simulierte Datenquellen dienen.
+    %    Diese Fakes publizieren simulierte Daten an Kafka Topics, um die Datenpipeline zu testen.
+    %
+    %    \item \textbf{Phase 3: Skalierung und Optimierung} – In dieser Phase wird das System auf größere Datenmengen skaliert und in den produktiven Betrieb überführt.
+    %    Dabei wird der Fokus auf die Optimierung der Datenströme und der Algorithmen gelegt, um Echtzeit-Entscheidungen und Vorhersagen zu verbessern.
+    %\end{itemize}
 
-    \subsection{Automatisierte Bestandsverwaltung}
+    %\subsection{Automatisierte Bestandsverwaltung}
 
-        Ein zentraler Aspekt des Systems ist die \textbf{automatisierte Bestandsverwaltung}. 
-        Das System wird kontinuierlich Verkaufs- und Lagerbestandsdaten über Apache Kafka sammeln und in Echtzeit verarbeiten. 
-        Sobald festgelegte Bestandsgrenzen erreicht werden, werden automatische Nachbestellungen ausgelöst. 
-        Durch die Modularität der Architektur kann dieser Service unabhängig skaliert und optimiert werden.
+    % Die automatisierte Bestandsverwaltung ist ein Kernziel des Projekts und wird in diesem Abschnitt beschrieben.
+    Ein zentraler Aspekt des Systems ist die automatisierte Bestands- und Verkaufserfassung.
+    Verkaufs- und Lagerbestandsdaten werden kontinuierlich über Apache Kafka gesammelt und in Echtzeit verarbeitet.
+    Sobald festgelegte Bestandsgrenzen erreicht sind, sollen z. B. automatische Nachbestellungen ausgelöst.
 
-        Die schrittweise Einführung dieser automatisierten Bestandsverwaltung beginnt in Pilotfilialen, um die Effizienz und Reaktionsfähigkeit auf saisonale und regionale Unterschiede zu testen. 
-        Durch den Einsatz von Kubernetes wird eine flexible Skalierung ermöglicht, um die steigenden Datenanforderungen in den verschiedenen Phasen des Rollouts zu bewältigen.
+    Während der Entwicklungsphase werden Fakes verwendet, um Datenströme zu simulieren und die automatisierte Bestandsverwaltung zu testen, bevor das System mit realen Daten verknüpft wird.
+    Die Einführung dieser Verwaltung würde nach Abschluss schrittweise in Pilotfilialen erfolgen, um die Effizienz und Anpassungsfähigkeit an regionale und saisonale Unterschiede zu testen.
+    Kubernetes ermöglicht die flexible Skalierung der Infrastruktur, um die Datenanforderungen zu bewältigen.
 
-    \subsection{Datenbasierte Entscheidungsfindung}
+    %\subsection{Datenbasierte Entscheidungsfindung}
 
-        Die \textbf{datengestützte Entscheidungsfindung} wird durch Echtzeit-Datenanalysen ermöglicht, die es erlauben, auf aktuelle Entwicklungen in den Filialen zu reagieren. 
-        Mithilfe von Machine Learning-Algorithmen werden \textbf{Verkaufsprognosen} erstellt, die dynamische Preisanpassungen und personalisierte Angebote unterstützen.
-        Diese Algorithmen werden kontinuierlich mit den neuesten Verkaufs- und Lagerdaten trainiert, die über Kafka in das System eingespeist werden. 
-        Die Fähigkeit, in Echtzeit auf sich ändernde Daten zu reagieren, ist dabei der Schlüssel, um genaue Vorhersagen und fundierte Geschäftsentscheidungen zu ermöglichen.
+    Die datengestützte Entscheidungsfindung wird durch Echtzeit-Datenanalysen ermöglicht, die es dem Management erlauben, auf aktuelle Entwicklungen in den Filialen zu reagieren.
+    Mithilfe von Machine Learning-Algorithmen werden Verkaufsprognosen erstellt, die dynamische Preisanpassungen und personalisierte Angebote unterstützen.
+    Diese Algorithmen werden kontinuierlich mit aktuellen Verkaufs- und Lagerdaten sowie weiteren relevanten Daten trainiert, die über Kafka in das System eingespeist werden.
+    In der Entwicklungsphase wird dies mit simulierten Daten getestet.
 
-        Die Implementierung der Machine Learning-Algorithmen wird allerdings nicht im Rahmen dieser Arbeit behandelt, um den Rahmen nicht zu sprengen.
-        Im Fokus der Arbeit steht das Data Engineering.
+    Obwohl Machine Learning eine zentrale Rolle in der zukünftigen Entwicklung spielt, liegt der Fokus dieses Projekts auf der Implementierung der zugrunde liegenden Dateninfrastruktur.
+    Die konkrete Implementierung der Machine Learning Algorithmen wird nicht abgehandelt.
+
+    %\subsection{Integration und Datenquellen}
+
+    Die nahtlose Integration bestehender Systeme ist ein weiterer strategischer Fokus.
+    Die Kassensysteme und CRM-Systeme der Frischmarkt AG sollen in die neue Dateninfrastruktur eingebunden werden, wobei Apache Kafka als zentrale Plattform für die Datenaufnahme fungiert.
+
+    Da der Zugang zu produktiven Datenquellen in der Entwicklungsphase noch nicht gegeben ist, werden wie bereits erläutert Fakes verwendet, um Kassendaten, Lagerbestände und andere Daten zu simulieren.
+    Diese Fakes publizieren Daten an Kafka Topics, um den realen Betrieb zu simulieren und die Datenpipeline unter realistischen Bedingungen zu testen.
+
+    Die Ziel-Architektur ist in nachfolgender Abbildung \ref{fig:architekturentwurf} zu sehen.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{assets/architekturentwurf.jpg}
+        \caption{Architekturübersicht}
+        \label{fig:architekturentwurf}
+    \end{figure}
+
+    %\subsection{Datensicherheit und Datenschutz}
+
+    Datensicherheit und Datenschutz sind ebenfalls zentrale Bestandteile.
+    Erfasste Kundendaten werden gemäß der Datenschutz-Grundverordnung (DSGVO) verarbeitet.
+    Die Speicherung und Verarbeitung der Daten erfolgt verschlüsselt, und es werden strenge Zugangskontrollen implementiert.
+
+    Um die Einhaltung der Datenschutzanforderungen sicherzustellen, werden Sicherheitsmechanismen wie verschlüsselte Datenübertragungen und in Zukunft regelmäßige Sicherheitsaudits in die Infrastruktur integriert.
+    Ein Data Governance-Framework regelt den Umgang mit den Daten und gewährleistet Transparenz.
+
+    %\subsection{Zusammenarbeit und Versionskontrolle}
+
+    Die Zusammenarbeit zwischen den internen IT-Teams der Frischmarkt AG und externen Experten ist entscheidend für den Erfolg des Projekts.
+    Git in Verbindung mit GitHub wird als Plattform für die Versionskontrolle genutzt, um eine klare Rückverfolgbarkeit der Änderungen und eine kollaborative Entwicklung in verteilten Teams zu ermöglichen.
+
+    %\subsection{Schlussfolgerung}
+
+    Die Strategie zur Entwicklung der Dateninfrastruktur für die Frischmarkt AG basiert auf einer modularen, skalierbaren Architektur, die Kubernetes, Helm und Podman verwendet, um die Skalierbarkeit, Wartbarkeit und Verfügbarkeit des Systems sicherzustellen.
+    Apache Kafka wird als zentrale Plattform für die Datenaufnahme und -verarbeitung eingesetzt.
+    Simulierte Datenquellen werden genutzt, um die Datenpipeline während der Entwicklungsphase zu testen.
+    Datensicherheit und Datenschutz haben höchste Priorität, um den gesetzlichen Anforderungen gerecht zu werden.
 
 
-    \subsection{Integration und Datenquellen}
-
-        Die nahtlose Integration bestehender Systeme ist ein weiterer strategischer Fokus. 
-        FreshMart AG verfügt bereits über Kassensysteme und CRM-Systeme, die in die neue Dateninfrastruktur eingebunden werden sollen. 
-        Apache Kafka fungiert hierbei als zentrale Plattform für die Datenaufnahme, die eine konsistente und skalierbare Verarbeitung von Daten aus verschiedenen Quellen ermöglicht.
-
-        Diese Datenquellen werden schrittweise in die Infrastruktur integriert, um sicherzustellen, dass das System stabil arbeitet und die Datenströme effizient verarbeitet werden können.
-
-    \subsection{Datensicherheit und Datenschutz}
-
-        Ein zentraler Bestandteil der Strategie ist die Berücksichtigung von \textbf{Datensicherheit} und \textbf{Datenschutz}. 
-        Alle Kundendaten werden gemäß den Vorgaben der \textbf{Datenschutz-Grundverordnung (DSGVO)} verarbeitet. 
-        Die Speicherung und Verarbeitung der Daten erfolgt verschlüsselt, und es werden strenge Zugangskontrollen implementiert, um unbefugten Zugriff zu verhindern.
-
-        Um die Einhaltung der Datenschutzanforderungen zu gewährleisten, werden Sicherheitsmechanismen wie \textbf{verschlüsselte Datenübertragungen} und \textbf{regelmäßige Sicherheitsaudits} in die Infrastruktur integriert. Zudem sorgt das \textbf{Data Governance}-Framework dafür, dass der Umgang mit Daten klar geregelt und nachvollziehbar ist.
-
-    \subsection{Zusammenarbeit und Versionskontrolle}
-
-        Die enge Zusammenarbeit zwischen den internen IT-Teams der FreshMart AG und externen Experten ist ein entscheidender Erfolgsfaktor für das Projekt. 
-        Um die Arbeit effizient zu koordinieren und sicherzustellen, dass alle Änderungen nachvollziehbar sind, wird Git in Verbindung mit \textbf{GitHub} als Plattform für die Versionskontrolle verwendet. 
-        Dies ermöglicht eine klare Rückverfolgbarkeit der Änderungen und die kollaborative Entwicklung in verteilten Teams.
-
-        \textbf{Regelmäßige Feedback-Schleifen} und Tests während des gesamten Entwicklungsprozesses stellen sicher, dass das System kontinuierlich verbessert und an die spezifischen Anforderungen angepasst wird.
-
-    \subsection{Schlussfolgerung}
-
-        Die Strategie zur Entwicklung der neuen Dateninfrastruktur für FreshMart AG basiert auf einer modularen, skalierbaren Architektur, die den Einsatz von Kubernetes, Helm und Podman zur Sicherstellung der Skalierbarkeit, Wartbarkeit und Verfügbarkeit umfasst. 
-        Durch die Verwendung von Apache Kafka als zentrale Plattform für die Datenaufnahme und -verarbeitung sowie Machine Learning für datenbasierte Vorhersagen werden die internen Abläufe effizienter gestaltet. Gleichzeitig wird höchsten Wert auf Datensicherheit und Datenschutz gelegt, um den gesetzlichen Anforderungen gerecht zu werden.
+% To-Dos:
+% Inhalt eindampfen
 
 
+%Folgende Fragen klären:
+% Am Ende dieser Phase fertigst Du eine konzeptionelle Zeichnung Deiner Dateninfrastruktur an. Außerdem soll-
+% test Du dabei für Dich selbst folgende Fragen beantworten können:
+% • Welcher Microservice wird data ingestion in mein System übernehmen?
+% • Welcher Microservice wird die Datenvorprozessierung und Aggregation übernehmen?
+% • Mit welchen Techniken und Methoden stelle ich sicher, dass mein System zuverlässig (reliable), skalierbar
+% (scalable) und wartbar (maintainable) ist?
+% • Mit welchen Techniken stelle ich sicher, dass Datenschutz, Datensicherheit und Data Governance in mei-
+% nem System berücksichtigt werden?
+% • Welche Docker Images werde ich nutzen, um mein System aufzubauen und müssen diese gegebenenfalls
+% modifiziert werden?
+% • Welche Daten werde ich verwenden, um mein System zu testen?
+% • Welche Aggregations- und Windowing-Funktionen werde ich nutzen, um die Daten zu aggregieren?
+
+% Abschließend stellst Du Deine Gedanken und Recherchen in einer konzeptionellen Flow-Chart-Zeichnung zum
+% Entwurf Deiner Architektur zusammen. Zur Inspiration kannst Du beispielsweise die Referenzarchitekturen der
+% großen Cloud Provider nutzen (bspw. Microsoft Azure Reference Architecture: https://docs.microsoft.com/en-
+% gb/azure/architecture/browse/ [letzter Zugriff: 11.11.2020]). Außerdem solltest Du die Vor- und Nachteile Deiner
+% konzeptionellen Architektur diskutieren.
 
 
 \ifx\VAlterZitierstil\VTrueValue
