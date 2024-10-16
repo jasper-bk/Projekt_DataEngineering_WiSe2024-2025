@@ -222,7 +222,6 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
     % Die automatisierte Bestandsverwaltung ist ein Kernziel des Projekts und wird in diesem Abschnitt beschrieben.
     Ein zentraler Aspekt des Systems ist die automatisierte Bestands- und Verkaufserfassung.
     Verkaufs- und Lagerbestandsdaten werden kontinuierlich über Apache Kafka gesammelt und in Echtzeit verarbeitet.
-    Sobald festgelegte Bestandsgrenzen erreicht sind, sollen z. B. automatische Nachbestellungen ausgelöst.
 
     Das Sammeln der Daten wird in den Filialen oder anderen Einrichtungen des Unternehmens von unabhängigen kleinen Rechnern übernommen, um möglichst flexibel mit den Gegebenheiten vor Ort umgehen zu können.
     Ohne zusätzlichen Computer ist das direkte Senden der Daten aus der Kasse direkt zu Kafka technisch schwer realisierbar, da es keine einfache Möglichkeit gibt containerisierte Microservices darauf auszuführen.
@@ -271,11 +270,10 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
     Im Rahmen der Entwicklung werden sie jedoch ebenfalls im Cluster bereitgestellt.
 
     Apache Kafka und andere Softwarebestandteile, die keine Eigenentwicklung sind, werden über Helm Packages installiert.
-    Darin sind ebenfalls auch die richtigen \enquote{Docker-Images} hinterlegt.
-    Ein gut geeigntes Helm-Packahe für Kafka ist z. B. folgendes: \url{https://artifacthub.io/packages/helm/bitnami/kafka}.
+    Darin sind ebenfalls auch die \enquote{richtigen Docker-Images} hinterlegt.
+    Ein gut geeigntes Helm Package für Kafka ist z. B. folgendes: \url{https://artifacthub.io/packages/helm/bitnami/kafka}.
 
-    Die Entscheidung für eine Microservice-Architektur bietet mehrere wesentliche Vorteile:
-
+    Die Entscheidung für diese Microservice-Architektur bietet mehrere wesentliche Vorteile:
     \begin{itemize}
         \item \textbf{Skalierbarkeit durch Microservices}: Die Nutzung von Kubernetes ermöglicht eine flexible und effiziente Skalierung der einzelnen Services.
         \item \textbf{Flexibilität durch Kafka}: Kafka entkoppelt Datenquellen und -senken, was eine flexible Integration neuer Datenquellen ermöglicht.
@@ -285,7 +283,6 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
     \end{itemize}
 
     Es gibt jedoch auch einige Nachteile, die mit dieser Architektur verbunden sind:
-
     \begin{itemize}
         \item \textbf{Komplexität der Integration}: Die Integration von Kafka, Kubernetes und Microservices erfordert erhebliche technische Expertise.
         \item \textbf{Erhöhter Wartungsaufwand}: Die verteilte Architektur erfordert eine kontinuierliche Überwachung und Pflege.
@@ -304,7 +301,7 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
     %\subsection{Zusammenarbeit und Versionskontrolle}
 
     Die Zusammenarbeit zwischen den internen IT-Teams der Frischmarkt AG und externen Experten ist entscheidend für den Erfolg des Projekts.
-    Git in Verbindung mit GitHub wird als Plattform für die Versionskontrolle genutzt, um eine klare Rückverfolgbarkeit der Änderungen und eine kollaborative Entwicklung in verteilten Teams zu ermöglichen.
+    Git in Verbindung mit GitHub als Plattform wird für die Versionskontrolle genutzt, um eine klare Rückverfolgbarkeit der Änderungen und eine kollaborative Entwicklung in verteilten Teams zu ermöglichen.
 
     %\subsection{Schlussfolgerung}
 
