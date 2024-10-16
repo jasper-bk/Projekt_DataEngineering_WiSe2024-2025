@@ -85,6 +85,7 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
     \setlength{\parindent}{6pt} % Indent at start of paragraphs  6pt
 
     \renewcommand\thesection{\arabic{section}}
+    \renewcommand\thefigure{\arabic{figure}}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -223,14 +224,23 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
     Verkaufs- und Lagerbestandsdaten werden kontinuierlich über Apache Kafka gesammelt und in Echtzeit verarbeitet.
     Sobald festgelegte Bestandsgrenzen erreicht sind, sollen z. B. automatische Nachbestellungen ausgelöst.
 
-    Während der Entwicklungsphase werden Fakes verwendet, um Datenströme zu simulieren und die automatisierte Bestandsverwaltung zu testen, bevor das System mit realen Daten verknüpft wird.
+    Das Sammeln der Daten wird in den Filialen oder anderen Einrichtungen des Unternehmens von unabhängigen kleinen Rechnern übernommen, um möglichst flexibel mit den Gegebenheiten vor Ort umgehen zu können.
+    Ohne zusätzlichen Computer ist das direkte Senden der Daten aus der Kasse direkt zu Kafka technisch schwer realisierbar, da es keine einfache Möglichkeit gibt containerisierte Microservices darauf auszuführen.
+    Daher werden die Microservices auf seperaten Rechnern ausgeführt und es werden die Schnittstellen zu den Systemen vor Ort, wie u. a. die Kassensysteme genutzt.
+    So lassen sich für unterschiedliche Betriebsstätten auch verschiedene Microservices einsetzen, die ihre vorberarbeiteten Daten an eine zentrale Stelle senden.
+    Da die Datenvorprozessierung und Aggregation bereits außerhalb des eigentlichen Rechenzentrums stattfindet handelt es sich bei dem Konzept u. a. auch um Edge Computing.
+
+    Während der Entwicklungsphase werden Fakes verwendet, welche diese Rechner dann nachstellen, um Datenströme zu simulieren und die automatisierte Bestandsverwaltung zu testen, bevor das System mit realen Daten verknüpft wird.
+    Die zusendenden Daten sollen auf eine Minute zusammengefasst sein.
     Die Einführung dieser Verwaltung würde nach Abschluss schrittweise in Pilotfilialen erfolgen, um die Effizienz und Anpassungsfähigkeit an regionale und saisonale Unterschiede zu testen.
     Kubernetes ermöglicht die flexible Skalierung der Infrastruktur, um die Datenanforderungen zu bewältigen.
+    Im Rahmen der Entwicklung wird das Kernsystem nur auf ein Single-Node Cluster ausgerollt und die Edge-Computer Microservices in einem eigenen Namespace.
+    Später im Produktivbetrieb lässt sich dann ohne zusätzlichen Aufwand auf ein Multi-Node Cluster oder ein High Availability (HA) Cluster bestehend aus mehreren anderen Clustern umsteigen und die Edge-Computer Microservices lassen sich auf kleinere Rechner vor Ort ausrollen.
 
     %\subsection{Datenbasierte Entscheidungsfindung}
 
     Die datengestützte Entscheidungsfindung wird durch Echtzeit-Datenanalysen ermöglicht, die es dem Management erlauben, auf aktuelle Entwicklungen in den Filialen zu reagieren.
-    Mithilfe von Machine Learning-Algorithmen werden Verkaufsprognosen erstellt, die dynamische Preisanpassungen und personalisierte Angebote unterstützen.
+    Mithilfe von Machine Learning-Algorithmen werden Verkaufsprognosen erstellt, die u. a. dynamische Preisanpassungen und personalisierte Angebote unterstützen.
     Diese Algorithmen werden kontinuierlich mit aktuellen Verkaufs- und Lagerdaten sowie weiteren relevanten Daten trainiert, die über Kafka in das System eingespeist werden.
     In der Entwicklungsphase wird dies mit simulierten Daten getestet.
 
@@ -243,9 +253,11 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
     Die Kassensysteme und CRM-Systeme der Frischmarkt AG sollen in die neue Dateninfrastruktur eingebunden werden, wobei Apache Kafka als zentrale Plattform für die Datenaufnahme fungiert.
 
     Da der Zugang zu produktiven Datenquellen in der Entwicklungsphase noch nicht gegeben ist, werden wie bereits erläutert Fakes verwendet, um Kassendaten, Lagerbestände und andere Daten zu simulieren.
-    Diese Fakes publizieren Daten an Kafka Topics, um den realen Betrieb zu simulieren und die Datenpipeline unter realistischen Bedingungen zu testen.
+    Diese Fakes publizieren vorprozessierte Daten an Kafka Topics, um den realen Betrieb zu simulieren und die Datenpipeline unter realistischen Bedingungen zu testen.
+    Die Fakes übernehmen damit auch die Aufgabe der Vorprozessierung, die im Produktivbetrieb von dem Edge-Computer und dessen Microservice(s) gemacht werden würden.
+    Anschließend werden die publizierten Daten aus den Topics von verschiedenen Microservices konsumiert und für die verschiedenen Anwendungsfälle verarbeitet und anschließend in den Datensenken bereitgestellt.
 
-    Die Ziel-Architektur ist in nachfolgender Abbildung \ref{fig:architekturentwurf} zu sehen.
+    Die Ziel-Architektur ist in nachfolgender Abbildung \ref{fig:architekturentwurf} vereinfacht dargestellt.
 
     \begin{figure}[H]
         \centering
@@ -253,6 +265,32 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
         \caption{Architekturübersicht}
         \label{fig:architekturentwurf}
     \end{figure}
+
+    Die Exklusion der API und der Datensenken aus dem Kubernetes Cluster in der Abbildung \ref{fig:architekturentwurf} ist lediglich implizit.
+    Das bedeutet, dass sie nicht unbedingt im Kubernetes-Cluster betrieben werden müssen, da sie keine unbedingt skalierbaren Microservices darstellen.
+    Im Rahmen der Entwicklung werden sie jedoch ebenfalls im Cluster bereitgestellt.
+
+    Apache Kafka und andere Softwarebestandteile, die keine Eigenentwicklung sind, werden über Helm Packages installiert.
+    Darin sind ebenfalls auch die richtigen \enquote{Docker-Images} hinterlegt.
+    Ein gut geeigntes Helm-Packahe für Kafka ist z. B. folgendes: \url{https://artifacthub.io/packages/helm/bitnami/kafka}.
+
+    Die Entscheidung für eine Microservice-Architektur bietet mehrere wesentliche Vorteile:
+
+    \begin{itemize}
+        \item \textbf{Skalierbarkeit durch Microservices}: Die Nutzung von Kubernetes ermöglicht eine flexible und effiziente Skalierung der einzelnen Services.
+        \item \textbf{Flexibilität durch Kafka}: Kafka entkoppelt Datenquellen und -senken, was eine flexible Integration neuer Datenquellen ermöglicht.
+        \item \textbf{Echtzeit-Datenverarbeitung}: Kafka bietet nahezu sofortige Datenweitergabe, was in Echtzeit Entscheidungen ermöglicht.
+        \item \textbf{Zentralisierte Datenverarbeitung}: OLTP-Systeme und Data-Warehouses ermöglichen parallele Nutzung für operative und analytische Zwecke.
+        \item \textbf{Modularität und Wartbarkeit}: Jeder Dienst kann unabhängig entwickelt und gewartet werden, was die Agilität erhöht.
+    \end{itemize}
+
+    Es gibt jedoch auch einige Nachteile, die mit dieser Architektur verbunden sind:
+
+    \begin{itemize}
+        \item \textbf{Komplexität der Integration}: Die Integration von Kafka, Kubernetes und Microservices erfordert erhebliche technische Expertise.
+        \item \textbf{Erhöhter Wartungsaufwand}: Die verteilte Architektur erfordert eine kontinuierliche Überwachung und Pflege.
+        \item \textbf{Datenkonsistenz}: In einer verteilten, asynchronen Umgebung besteht ein Risiko für inkonsistente Daten zwischen verschiedenen Systemen.
+    \end{itemize}
 
     %\subsection{Datensicherheit und Datenschutz}
 
@@ -278,26 +316,23 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
 
 % To-Dos:
 % Inhalt eindampfen
+% Prüfen wie lang der Inhalt der Konzeption in diesem Modul sein darf
+% Falls länger, dann ein Kapitel zur technischen Details einbauen und auf Helm templates, Images und die anderen Fragen unter diesem Satz eingehen.
 
 
 %Folgende Fragen klären:
-% Am Ende dieser Phase fertigst Du eine konzeptionelle Zeichnung Deiner Dateninfrastruktur an. Außerdem soll-
-% test Du dabei für Dich selbst folgende Fragen beantworten können:
-% • Welcher Microservice wird data ingestion in mein System übernehmen?
-% • Welcher Microservice wird die Datenvorprozessierung und Aggregation übernehmen?
-% • Mit welchen Techniken und Methoden stelle ich sicher, dass mein System zuverlässig (reliable), skalierbar
-% (scalable) und wartbar (maintainable) ist?
-% • Mit welchen Techniken stelle ich sicher, dass Datenschutz, Datensicherheit und Data Governance in mei-
-% nem System berücksichtigt werden?
-% • Welche Docker Images werde ich nutzen, um mein System aufzubauen und müssen diese gegebenenfalls
-% modifiziert werden?
-% • Welche Daten werde ich verwenden, um mein System zu testen?
+% Am Ende dieser Phase fertigst Du eine konzeptionelle Zeichnung Deiner Dateninfrastruktur an. Außerdem solltest Du dabei für Dich selbst folgende Fragen beantworten können:
+% • Welcher Microservice wird data ingestion in mein System übernehmen?                                                                             Die an der Kante
+% • Welcher Microservice wird die Datenvorprozessierung und Aggregation übernehmen?                                                                 Die an der Kante
+% • Mit welchen Techniken und Methoden stelle ich sicher, dass mein System zuverlässig (reliable), skalierbar (scalable) und wartbar (maintainable) ist? Kubernetes & Helm
+% • Mit welchen Techniken stelle ich sicher, dass Datenschutz, Datensicherheit und Data Governance in meinem System berücksichtigt werden?          Data Governance-Framework
+% • Welche Docker Images werde ich nutzen, um mein System aufzubauen und müssen diese gegebenenfalls modifiziert werden?                            Die aus Helm
+% • Welche Daten werde ich verwenden, um mein System zu testen?                                                                                     Fake-Daten
 % • Welche Aggregations- und Windowing-Funktionen werde ich nutzen, um die Daten zu aggregieren?
 
 % Abschließend stellst Du Deine Gedanken und Recherchen in einer konzeptionellen Flow-Chart-Zeichnung zum
 % Entwurf Deiner Architektur zusammen. Zur Inspiration kannst Du beispielsweise die Referenzarchitekturen der
-% großen Cloud Provider nutzen (bspw. Microsoft Azure Reference Architecture: https://docs.microsoft.com/en-
-% gb/azure/architecture/browse/ [letzter Zugriff: 11.11.2020]). Außerdem solltest Du die Vor- und Nachteile Deiner
+% großen Cloud Provider nutzen (bspw. Microsoft Azure Reference Architecture: https://docs.microsoft.com/en-gb/azure/architecture/browse/ [letzter Zugriff: 11.11.2020]). Außerdem solltest Du die Vor- und Nachteile Deiner
 % konzeptionellen Architektur diskutieren.
 
 
