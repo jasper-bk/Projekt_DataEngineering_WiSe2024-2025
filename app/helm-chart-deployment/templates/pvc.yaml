@@ -1,0 +1,26 @@
+{{- if $.Values.global.extraPersistentVolumeClaims }}
+{{- range $key, $pvc := $.Values.global.extraPersistentVolumeClaims }}
+
+{{- /* only create a pvc if not already exists */}}
+{{- if not (lookup "v1" "PersistentVolumeClaim" $.Release.Namespace $pvc.name ) -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $pvc.name }}
+  namespace: {{ $.Release.Namespace }}
+  annotations:
+    helm.sh/resource-policy: keep
+  labels:
+    chart: {{ $.Release.Name }}-chart
+    release: {{ $.Release.Name }}
+spec:
+  storageClassName: {{ $pvc.storageClassName }}
+  accessModes:
+    - {{ $pvc.accessMode }}
+  resources:
+    requests:
+      storage: {{ $pvc.size }}
+{{- end }}
+{{- end }}
+---
+{{- end }}

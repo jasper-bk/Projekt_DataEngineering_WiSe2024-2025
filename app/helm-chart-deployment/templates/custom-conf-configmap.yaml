@@ -1,0 +1,11 @@
+{{ if $.Values.global.extraConfigurationConfigMaps }}
+{{ range $configmapname, $filePath := $.Values.global.extraConfigurationConfigMaps }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $configmapname }}
+data:
+{{ ( $.Files.Glob $filePath ).AsConfig | indent 2 }}
+---
+{{ end }}
+{{ end }}

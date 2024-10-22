@@ -1,0 +1,11 @@
+apiVersion: v2
+name: custom-helm
+version: 1.0.0
+appVersion: 1.0.0
+description: Custom Helm Chart
+keywords:
+- kubernetes
+maintainers:
+- email: mail@jasper.bremenkamp.de
+  name: jasper
+  url: https://jasper.bremenkamp.de

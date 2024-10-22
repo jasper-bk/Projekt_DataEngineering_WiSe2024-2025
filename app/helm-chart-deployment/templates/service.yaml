@@ -1,0 +1,41 @@
+{{ range $applicationname, $application := .Values.applications }}
+
+{{- if and ($application.service) (default $application.service.enabled true) }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ $applicationname }}
+  name: {{ $.Release.Name }}-{{ $applicationname }}-svc
+spec:
+  ports:
+    - name: "{{ $application.service.targetPort }}"
+      port: {{ $application.service.port }}
+      protocol: TCP
+      targetPort: {{ $application.service.targetPort }}
+  selector:
+    app: {{ $applicationname }}
+
+{{- if (or (eq $application.service.type "ClusterIP") (empty $application.service.type)) }}
+  type: ClusterIP
+  {{- if $application.service.clusterIP }}
+  clusterIP: {{ $application.service.clusterIP }}
+  {{end}}
+{{- else if eq $application.service.type "LoadBalancer" }}
+  type: {{ $application.service.type }}
+  {{- if $application.service.loadBalancerIP }}
+  loadBalancerIP: {{ $application.service.loadBalancerIP }}
+  {{- end }}
+  {{- if $application.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+{{ toYaml $application.service.loadBalancerSourceRanges | indent 4 }}
+  {{- end -}}
+{{- else }}
+  type: {{ $application.service.type }}
+{{- end }}
+
+{{ end }}
+---
+{{ end }}
+
+

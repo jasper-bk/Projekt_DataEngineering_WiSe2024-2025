@@ -1,0 +1,132 @@
+{{ range $jobname, $cronjob := .Values.jobs }}
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $.Release.Name }}-{{ $jobname }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app: {{ $.Release.Name }}-{{ $jobname }}
+    chart: {{ $.Release.Name }}-chart
+    release: {{ $.Release.Name }}
+  annotations:
+    {{- toYaml $.Values.annotations | nindent 4 }}
+spec:
+  schedule: "{{ $cronjob.schedule }}"
+  {{- if $cronjob.concurrencyPolicy }}
+  concurrencyPolicy: {{ $cronjob.concurrencyPolicy }}
+  {{- end }}
+  successfulJobsHistoryLimit: {{ $cronjob.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ $cronjob.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: {{ $cronjob.ttlSecondsAfterFinished }}
+      template:
+        metadata:
+          labels:
+            date: "{{ now | unixEpoch }}" #enforces pulling event if the tag didnt change
+            app: {{ $jobname }}
+            name: {{ $.Release.Name }}-{{ $jobname }}
+            release: {{ $.Release.Name }}
+        spec:
+          {{- if $.Values.global.image.imagePullSecrets }}
+          imagePullSecrets:
+          {{- range $.Values.global.image.imagePullSecrets }}
+            - name: {{ . }}
+          {{- end }}
+          {{- end }}
+          {{- if $cronjob.restartPolicy }}
+          restartPolicy: {{ $cronjob.restartPolicy }}
+          {{- end }}
+          securityContext:
+          {{- if $.Values.global.securityContext }}
+          {{- toYaml $.Values.global.securityContext | nindent 12 }}
+          {{- end }}
+
+          {{- if not $cronjob.disableSidecars }}
+          {{- if $.Values.global.initContainers }}
+          initContainers:
+          {{- if $cronjob.extraInitContainers }}
+          {{- toYaml $cronjob.extraInitContainers | nindent 10 }}
+          {{- end }}
+          {{- toYaml $.Values.global.initContainers | nindent 10 }}
+            env:
+            {{- if $cronjob.workdir }}
+              - name: WORKDIR
+                value: {{ $cronjob.workdir }}
+            volumeMounts:
+            - name: workdir
+              mountPath: {{ $cronjob.workdir }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
+
+          containers:
+            - name: {{ $jobname }}
+              image: "{{ $.Values.global.image.imageRegistry }}/{{ $cronjob.spec.image.repository }}:{{ ( empty $cronjob.spec.image.tag ) | ternary $.Values.global.image.tag $cronjob.spec.image.tag }}"
+              imagePullPolicy: {{ $.Values.global.image.pullPolicy }}
+              {{- if hasKey $cronjob.spec "command" }}
+              command: {{ $cronjob.spec.command | toYaml | nindent 16 }}
+              {{- end }}
+              {{- if hasKey $cronjob.spec "args" }}
+              args: {{ $cronjob.spec.args | toYaml | nindent 16 }}
+              {{- end }}
+                {{-  if $cronjob.spec.resources }} {{- /* Service resource settings */}}
+              resources:
+                {{- toYaml $cronjob.spec.resources | nindent 16 }}
+              {{- else if $.Values.global.resources }}
+              resources:
+                {{- toYaml $.Values.global.resources | nindent 16 }}
+              {{- end }}
+              env:
+                {{- if $.Values.global.env }}
+                  {{- toYaml $.Values.global.env | nindent 16 }}
+                {{- end }}
+                {{- if $cronjob.spec.extraEnv }}
+                  {{- toYaml $cronjob.spec.extraEnv | nindent 16 }}
+                {{- end }}
+
+              volumeMounts:
+              {{- if $cronjob.workdir }}
+              - name: workdir
+                mountPath: {{ $cronjob.workdir }}
+              - name: mount-conf
+                mountPath: {{ (printf "%s%s" $cronjob.workdir "/cfg/" ) }}
+                readOnly: true
+              - name: mount-global-conf
+                mountPath: {{ $.Values.global.defaultConfLocation }}
+                readOnly: true
+              {{- end }}
+              {{- if $.Values.global.extraVolumeMounts }}
+                {{- toYaml $.Values.global.extraVolumeMounts | nindent 14 }}
+              {{- end }}
+              {{- if $cronjob.extraVolumeMounts }}
+                {{- toYaml $cronjob.extraVolumeMounts | nindent 14 }}
+              {{- end }}
+
+          {{- if not $cronjob.disableSidecars }}
+          {{- if $.Values.global.sidecars }} {{- /* additional services running in the same pod */}}
+          {{- toYaml $.Values.global.sidecars | nindent 12 }}
+          {{- end }}
+          {{- end }}
+
+          volumes:
+          {{- if $.Values.global.extraVolumes }}
+            {{- toYaml $.Values.global.extraVolumes | nindent 10 }}
+          {{- end }}
+          {{- if $cronjob.extraVolumes }}
+            {{- toYaml $cronjob.extraVolumes | nindent 10 }}
+          {{- end }}
+          {{- if $cronjob.workdir }}
+          - name: workdir
+            {{- /* #Possible To-Do: Use something else than default emptydir */}}
+          - name: mount-conf
+            secret:
+              secretName: {{ $.Release.Name }}-{{ $jobname }}-conf-secret
+          - name: mount-global-conf
+            secret:
+              secretName: {{ $.Release.Name }}-global-conf-secret
+          {{- end }}
+
+---
+{{ end }}

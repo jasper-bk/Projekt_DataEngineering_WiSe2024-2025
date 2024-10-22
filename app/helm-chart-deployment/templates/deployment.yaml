@@ -1,0 +1,175 @@
+# in case persistency is not enabled, a regular deployment will be used 
+
+{{ range $applicationname, $application := .Values.applications }}
+{{- /* Do not use deployment if persistence is enabled for the service and not globally */}}
+{{ if and ( or (not $application.persistence) (not $application.persistence.enabled) ) ( or (not $.Values.global.dockerMountPersistence) (not $.Values.global.dockerMountPersistence.enabled) ) }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Release.Name }}-{{ $applicationname }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app: {{ $applicationname }}
+    chart: {{ $.Release.Name }}-chart
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+  annotations:
+    {{- toYaml $.Values.annotations | nindent 4 }}
+spec:
+  podManagementPolicy: {{ $.Values.podManagementPolicy }}
+  replicas: {{ $application.replicas }}
+  revisionHistoryLimit: 1 # Defaults to 10 if not specified
+  selector:
+    matchLabels:
+      app: {{ $applicationname }}
+      release: {{ $.Release.Name }}
+  {{-  if $application.updateStrategy }} {{- /* Update strategy settings */}}
+  strategy:
+    {{- toYaml $application.updateStrategy | nindent 4 }}
+  {{- else if $.Values.global.updateStrategy }}
+  strategy:
+    {{- toYaml $.Values.global.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        date: "{{ now | unixEpoch }}" #enforces pulling event if the tag didnt change
+        app: {{ $applicationname }}
+        name: {{ $.Release.Name }}-{{ $applicationname }}
+        release: {{ $.Release.Name }}
+        {{- with $application.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- with $application.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+    {{- if $application.priorityClassName }}
+      priorityClassName: {{ $application.priorityClassName }}
+    {{- end }}
+      securityContext:
+        {{- toYaml $.Values.global.securityContext | nindent 8 }}
+      {{- if $.Values.global.image.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range $.Values.global.image.imagePullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
+      {{- if not $application.disableSidecars }}
+      {{- if $.Values.global.initContainers }}
+      initContainers:
+        {{- if $application.extraInitContainers }}
+        {{- toYaml $application.extraInitContainers | nindent 8 }}
+        {{- end }}
+        {{- toYaml $.Values.global.initContainers | nindent 8 }}
+          env:
+          {{- if $application.workdir }}
+            - name: WORKDIR
+              value: {{ $application.workdir }}
+          volumeMounts:
+          - name: workdir
+            mountPath: {{ $application.workdir }}
+          {{- end }}
+
+          {{- if $.Values.global.extraVolumeMounts }}
+            {{- toYaml $.Values.global.extraVolumeMounts | nindent 10 }}
+          {{- end }}
+          {{- if $application.extraVolumeMounts }}
+            {{- toYaml $application.extraVolumeMounts | nindent 10 }}
+          {{- end }}
+          
+        {{- end }}
+        {{- end }}
+      containers:
+        - name: {{ $applicationname }}
+          image: "{{ $.Values.global.image.imageRegistry }}/{{ $application.image.repository }}:{{ ( empty $application.image.tag ) | ternary $.Values.global.image.tag $application.image.tag }}"
+          imagePullPolicy: {{ $.Values.global.image.pullPolicy }}
+          {{-  if $application.resources }} {{- /* Service ressource settings */}}
+          resources:
+            {{- toYaml $application.resources | nindent 12 }}
+          {{- else if $.Values.global.resources }}
+          resources:
+            {{- toYaml $.Values.global.resources | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if $.Values.global.env }}
+              {{- toYaml $.Values.global.env | nindent 12 }}
+            {{- end }}
+            {{- if $application.extraEnv }}
+              {{- toYaml $application.extraEnv | nindent 12 }}
+            {{- end }}
+          {{- if and ($application.service) (default $application.service true)}}
+          ports:
+          - containerPort: {{ $application.service.targetPort }}
+          {{- end }}
+
+          {{- if $application.livenessProbe }}
+          livenessProbe:
+            {{- toYaml $application.livenessProbe | nindent 12 }}
+          {{- else if $.Values.global.livenessProbe }}
+          livenessProbe:
+            {{- toYaml $.Values.global.livenessProbe | nindent 12 }}
+          {{- end }}
+
+          {{- if $application.readinessProbe }}
+          readinessProbe:
+            {{- toYaml $application.readinessProbe | nindent 12 }}
+          {{- else if $.Values.global.readinessProbe }}
+          readinessProbe:
+            {{- toYaml $.Values.global.readinessProbe | nindent 12 }}
+          {{- end }}
+
+          volumeMounts:
+          {{- if $application.workdir }}
+          - name: workdir
+            mountPath: {{ $application.workdir }}
+          - name: mount-conf
+            mountPath: {{ (printf "%s%s" $application.workdir "/cfg/" ) }}
+            readOnly: true
+          - name: mount-global-conf
+            mountPath: {{ $.Values.global.defaultConfLocation }}
+            readOnly: true
+          {{- end }}
+          {{- if $.Values.global.extraVolumeMounts }}
+            {{- toYaml $.Values.global.extraVolumeMounts | nindent 10 }}
+          {{- end }}
+          {{- if $application.extraVolumeMounts }}
+            {{- toYaml $application.extraVolumeMounts | nindent 10 }}
+          {{- end }}
+      {{- if not $application.disableSidecars }}
+      {{- if $.Values.global.sidecars }} {{- /* additional services running in the same pod */}}
+      {{- toYaml $.Values.global.sidecars | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      volumes:
+      {{- if $.Values.global.extraVolumes }}
+        {{- toYaml $.Values.global.extraVolumes | nindent 6 }}
+      {{- end }}
+      {{- if $application.extraVolumes }}
+        {{- toYaml $application.extraVolumes | nindent 6 }}
+      {{- end }}
+      {{- if $application.workdir }}
+      - name: workdir
+        {{- /* #Possible To-Do: Use something else than default emptydir */}}
+      - name: mount-conf
+        secret:
+          secretName: {{ $.Release.Name }}-{{ $applicationname }}-conf-secret
+      - name: mount-global-conf
+        secret:
+          secretName: {{ $.Release.Name }}-global-conf-secret
+      {{- end }}
+      nodeSelector:
+        {{- toYaml $application.nodeSelector | nindent 8 }}
+      affinity:
+        {{- toYaml $application.affinity | nindent 8 }}
+      tolerations:
+        {{- toYaml $application.tolerations | nindent 8 }}
+      terminationGracePeriodSeconds: {{ $.Values.global.terminationGracePeriodSeconds }}
+
+---
+{{ end }}
+{{ end }}
+
+
