@@ -8,6 +8,9 @@
 # If you want to add a service or alter the configuration of one, head directly in to the "applications" section
 #
 
+# Potential to-do: Create a master helm chart which includes this and the other dependencies
+kafka: {}
+
 # This setting section will apply to all services (only change if absolutley necessary)
 global:
   image:
@@ -84,14 +87,15 @@ global:
 #################################
 
 # individual settings for single service applications
-applications:
+applications: {}
 
-  example-service:
-    image:
-      repository: foo-bar/example-service
-      tag: null
-    replicas: 1
-    workdir: "/shared_mount/example-service"
+  ## There is an errror somewhere
+  #example-service:
+  #  image:
+  #    repository: foo-bar/example-service
+  #    tag: null
+  #  replicas: 1
+  #  workdir: "/shared_mount/example-service"
 
 ##############################
 # Job configuration section #
