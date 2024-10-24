@@ -9,7 +9,39 @@
 #
 
 # Potential to-do: Create a master helm chart which includes this and the other dependencies
-kafka: {}
+kafka:
+
+  listeners:
+    client:
+      protocol: "PLAINTEXT" #<- this seems to be the important option to disable ssl in the beginning
+    controller:
+      protocol: "PLAINTEXT"
+    interbroker:
+      protocol: "PLAINTEXT"
+    external:
+      protocol: "PLAINTEXT"
+
+akhq:
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+  configuration:
+
+    micronaut:
+    security:
+      enabled: false
+
+    akhq:
+    security:
+      enabled: true
+
+    connections:
+        my-kafka-cluster:
+          properties:
+            bootstrap.servers: my-release-kafka:9092
+            security.protocol: PLAINTEXT
+
 
 # This setting section will apply to all services (only change if absolutley necessary)
 global:
