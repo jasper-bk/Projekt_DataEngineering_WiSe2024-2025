@@ -10,37 +10,51 @@
 
 # Potential to-do: Create a master helm chart which includes this and the other dependencies
 kafka:
-
   listeners:
     client:
-      protocol: "PLAINTEXT" #<- this seems to be the important option to disable ssl in the beginning
-    controller:
-      protocol: "PLAINTEXT"
-    interbroker:
-      protocol: "PLAINTEXT"
+      protocol: "PLAINTEXT" #<- this the important option to disable ssl for clients within the cluster in the beginning
     external:
       protocol: "PLAINTEXT"
 
-akhq:
-  livenessProbe:
-    enabled: false
-  readinessProbe:
-    enabled: false
-  configuration:
+  replicaCount: 1
 
-    micronaut:
-    security:
-      enabled: false
-
-    akhq:
-    security:
+  # Start of needed config for simplified external Access on a developer machine # Setup in production would use different values
+  externalAccess:
+    enabled: true
+    broker:
+      service:
+        type: LoadBalancer
+      ports:
+        external: 9094
+    controller:
+      service:
+        type: LoadBalancer
+        containerPorts:
+        external: 9094
+    autoDiscovery:
       enabled: true
 
-    connections:
-        my-kafka-cluster:
-          properties:
-            bootstrap.servers: my-release-kafka:9092
-            security.protocol: PLAINTEXT
+  serviceAccount:
+    create: true
+  rbac:
+    create: true
+
+  controller:
+    automountServiceAccountToken: true
+    replicaCount: 1     # by default three instances, but for development its easier to maintain und debug with one instance (especially because of the LoadBalancer settings)
+
+  broker:
+    automountServiceAccountToken: true
+  # End of needed config for external Access
+
+akhq:
+  configuration:
+    akhq:
+      connections:
+          my-kafka-cluster:
+            properties:
+              bootstrap.servers: my-release-kafka:9092 # has too match with the name of the release too: <release-name>-kafka:9092
+              security.protocol: PLAINTEXT
 
 
 # This setting section will apply to all services (only change if absolutley necessary)
