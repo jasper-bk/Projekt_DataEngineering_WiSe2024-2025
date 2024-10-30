@@ -1,0 +1,14 @@
+version: '3.8'
+
+
+# just for building all microservices
+# could be also used for deploying without kubernetes
+
+services:
+  data_ingestion_checkout_microservice:
+    image: "docker.io/jaspilein/iu-data-engineering/data_ingestion_checkout_microservice-dev"
+    build:
+      context: ./data_ingestion_checkout_microservice
+      dockerfile: Containerfile
+
+  # ...
