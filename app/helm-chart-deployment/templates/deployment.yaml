@@ -1,4 +1,4 @@
-# in case persistency is not enabled, a regular deployment will be used 
+# in case persistency is not enabled, a regular deployment will be used
 
 {{ range $applicationname, $application := .Values.applications }}
 {{- /* Do not use deployment if persistence is enabled for the service and not globally */}}
@@ -79,7 +79,7 @@ spec:
           {{- if $application.extraVolumeMounts }}
             {{- toYaml $application.extraVolumeMounts | nindent 10 }}
           {{- end }}
-          
+
         {{- end }}
         {{- end }}
       containers:
@@ -128,9 +128,6 @@ spec:
           - name: mount-conf
             mountPath: {{ (printf "%s%s" $application.workdir "/cfg/" ) }}
             readOnly: true
-          - name: mount-global-conf
-            mountPath: {{ $.Values.global.defaultConfLocation }}
-            readOnly: true
           {{- end }}
           {{- if $.Values.global.extraVolumeMounts }}
             {{- toYaml $.Values.global.extraVolumeMounts | nindent 10 }}
@@ -156,9 +153,6 @@ spec:
       - name: mount-conf
         secret:
           secretName: {{ $.Release.Name }}-{{ $applicationname }}-conf-secret
-      - name: mount-global-conf
-        secret:
-          secretName: {{ $.Release.Name }}-global-conf-secret
       {{- end }}
       nodeSelector:
         {{- toYaml $application.nodeSelector | nindent 8 }}

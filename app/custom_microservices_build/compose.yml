@@ -6,9 +6,15 @@ version: '3.8'
 
 services:
   data_ingestion_checkout_microservice:
-    image: "docker.io/jaspilein/iu-data-engineering/data_ingestion_checkout_microservice-dev"
+    image: "docker.io/jaspilein/iu-data-engineering-data_ingestion_checkout_microservice:DEV"
     build:
       context: ./data_ingestion_checkout_microservice
+      dockerfile: Containerfile
+
+  data_ingestion_warehouse_microservice:
+    image: "docker.io/jaspilein/iu-data-engineering-data_ingestion_warehouse_microservice:DEV"
+    build:
+      context: ./data_ingestion_warehouse_microservice
       dockerfile: Containerfile
 
   # ...

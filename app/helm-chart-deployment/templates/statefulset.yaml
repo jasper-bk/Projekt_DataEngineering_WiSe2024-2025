@@ -83,7 +83,7 @@ spec:
           {{- if $application.extraVolumeMounts }}
             {{- toYaml $application.extraVolumeMounts | nindent 10 }}
           {{- end }}
-          
+
           {{- end }}
         {{- end }}
       {{- end }}
@@ -132,9 +132,6 @@ spec:
           - name: mount-conf
             mountPath: {{ (printf "%s%s" $application.workdir "/cfg/" ) }}
             readOnly: true
-          - name: mount-global-conf
-            mountPath: {{ $.Values.global.defaultConfLocation }}
-            readOnly: false
           - name: app-pvc
             {{- /* if both application persistence and global persistence path contains a value, the one of application will be used instead of the global one */}}
           {{- if ( and $.Values.global.dockerMountPersistence $.Values.global.dockerMountPersistence.enabled ) }}
@@ -168,9 +165,6 @@ spec:
       - name: mount-conf
         secret:
           secretName: {{ $.Release.Name }}-{{ $applicationname }}-conf-secret
-      - name: mount-global-conf
-        secret:
-          secretName: {{ $.Release.Name }}-global-conf-secret
       {{- end }}
       nodeSelector:
         {{- toYaml $application.nodeSelector | nindent 8 }}

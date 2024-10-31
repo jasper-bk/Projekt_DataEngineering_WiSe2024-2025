@@ -60,9 +60,11 @@ akhq:
 # This setting section will apply to all services (only change if absolutley necessary)
 global:
   image:
-    imageRegistry: "foo-bar.registry.net"
-    imagePullSecrets:
-      - private-registry-secret
+
+    # maybe change to a different registry provide. for example quay.io or maybe a local one which is running in parallel outside the cluster
+    imageRegistry: "docker.io"
+    #imagePullSecrets:
+    #  - private-registry-secret
     pullPolicy: Always
 
     # can be defined to use it on all services (except those were the value is not null)
@@ -96,6 +98,9 @@ global:
   env:
     - name: TZ
       value: "Europe/Berlin"
+    - name: KAFKA_BROKER
+      value: "my-release-kafka:9092"
+
 
   # can be used to setup container environments
   initContainers:
@@ -133,15 +138,30 @@ global:
 #################################
 
 # individual settings for single service applications
-applications: {}
+applications:
 
-  ## There is an errror somewhere
-  #example-service:
-  #  image:
-  #    repository: foo-bar/example-service
-  #    tag: null
-  #  replicas: 1
-  #  workdir: "/shared_mount/example-service"
+  ## Applications for publishing data to topic
+
+  # To-Do: Readinessprobe which wait for kafka to be ready before startig the application
+  data-ingestion-checkout-microservice:
+    image:
+      repository: jaspilein/iu-data-engineering-data_ingestion_checkout_microservice
+      tag: null
+    replicas: 0 #start with zero instances. Should be scales manually
+    workdir: "/tmp/" #not needed right now
+
+  data-ingestion-warehouse-microservice:
+    image:
+      repository: jaspilein/iu-data-engineering-data_ingestion_warehouse_microservice
+      tag: null
+    replicas: 0 #start with zero instances. Should be scales manually
+    workdir: "/tmp/" #not needed right now
+
+
+  ## Applications consuming from topic
+
+  #...
+
 
 ##############################
 # Job configuration section #
