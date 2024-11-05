@@ -1,3 +1,10 @@
 Schreiben über:
 K3S für das Single-Node Cluster (während Entwicklung)
 Erst Lenses als Management Tool genutzt werden sollte, aber wegen der Lizenz dann doch zu AKHQ gewechselt wurde
+
+
+To-Dos:
+- Helm Chart splitten
+- Einmal für Kafka und AKHQ
+- und dann zwei Charts für die Services
+- Einmal die Publishenden und dann die Konsumierenden
