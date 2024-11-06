@@ -2,9 +2,12 @@ version: '3.8'
 
 
 # just for building all microservices
-# could be also used for deploying without kubernetes
+# could be also used for deploying without kubernetes # e. g. for edge nodes
 
 services:
+
+  # microservices publishing to kafka
+
   data_ingestion_checkout_microservice:
     image: "docker.io/jaspilein/iu-data-engineering-data_ingestion_checkout_microservice:DEV"
     build:
@@ -15,6 +18,26 @@ services:
     image: "docker.io/jaspilein/iu-data-engineering-data_ingestion_warehouse_microservice:DEV"
     build:
       context: ./data_ingestion_warehouse_microservice
+      dockerfile: Containerfile
+
+  # microservices consuming from kafka
+
+  status_information_microservice:
+    image: "docker.io/jaspilein/iu-data-engineering-status_information_microservice:DEV"
+    build:
+      context: ./status_information_microservice
+      dockerfile: Containerfile
+
+  daily_aggregation_reporting_microservice:
+    image: "docker.io/jaspilein/iu-data-engineering-daily_aggregation_reporting_microservice:DEV"
+    build:
+      context: ./daily_aggregation_reporting_microservice
+      dockerfile: Containerfile
+
+  automatic_order_microservice:
+    image: "docker.io/jaspilein/iu-data-engineering-automatic_order_microservice:DEV"
+    build:
+      context: ./automatic_order_microservice
       dockerfile: Containerfile
 
   # ...

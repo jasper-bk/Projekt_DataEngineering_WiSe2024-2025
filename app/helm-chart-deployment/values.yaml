@@ -161,7 +161,28 @@ applications:
     workdir: "/tmp/" #not needed right now
 
 
-  ## Applications consuming from topic
+  ## Applications consuming from topics
+
+  status-information-microservice:
+    image:
+      repository: jaspilein/iu-data-engineering-status_information_microservice
+      tag: null
+    replicas: 1 # To-Do: Readinessprobe or check if ready in application
+    workdir: "/tmp/" #not needed right now
+
+  daily-aggregation-reporting-microservice:
+    image:
+      repository: jaspilein/iu-data-engineering-daily_aggregation_reporting_microservice
+      tag: null
+    replicas: 1
+    workdir: "/tmp/" #not needed right now
+
+  automatic-order-microservice:
+    image:
+      repository: jaspilein/iu-data-engineering-automatic_order_microservice
+      tag: null
+    replicas: 1
+    workdir: "/tmp/" #not needed right now
 
   #...
 

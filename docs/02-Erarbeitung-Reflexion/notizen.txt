@@ -8,3 +8,4 @@ To-Dos:
 - Einmal für Kafka und AKHQ
 - und dann zwei Charts für die Services
 - Einmal die Publishenden und dann die Konsumierenden
+- Doppelte Python-Logik in "Klasse" zusammenlegen, um Copy-Paste zu vermeiden
