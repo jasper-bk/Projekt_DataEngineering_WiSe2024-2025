@@ -60,6 +60,12 @@ akhq:
               security.protocol: PLAINTEXT
 
 
+postgresql:
+  auth:
+    # custom database user
+    username: application-user
+    password: no-secret-default-password # if deployed to non dev environments use: --set postgresql.auth.password="newpassword"
+
 # This setting section will apply to all services (only change if absolutley necessary)
 global:
   image:
@@ -103,6 +109,8 @@ global:
       value: "Europe/Berlin"
     - name: KAFKA_BROKER
       value: "my-release-kafka:9092"
+    - name: POSTGRES_HOST
+      value: "my-release-postgresql"
 
 
   # can be used to setup container environments
