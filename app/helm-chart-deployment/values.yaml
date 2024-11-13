@@ -66,6 +66,29 @@ postgresql:
     username: application-user
     password: no-secret-default-password # if deployed to non dev environments use: --set postgresql.auth.password="newpassword"
 
+  primary:
+    initdb:
+      scripts:
+
+        # sql script which will be executed on first start
+        # Will create all nescessary tables. To recreate it needs a removal of the persistent volume: kubectl delete pvc data-my-release-postgresql-0
+        create-tables.sql: |
+          CREATE TABLE IF NOT EXISTS transactions_aggregated (
+              transaction_id SERIAL PRIMARY KEY,
+              store_id INT NOT NULL,
+              timestamp TIMESTAMPTZ NOT NULL,
+              total_price NUMERIC(10, 2) NOT NULL
+          );
+
+          CREATE TABLE IF NOT EXISTS inventory (
+              warehouse_id VARCHAR(10) NOT NULL,
+              item_id VARCHAR(10) NOT NULL,
+              item_name VARCHAR(100),
+              current_quantity INT NOT NULL DEFAULT 0,
+              last_updated TIMESTAMPTZ DEFAULT NOW(),
+              PRIMARY KEY (warehouse_id, item_id)
+          );
+
 # This setting section will apply to all services (only change if absolutley necessary)
 global:
   image:

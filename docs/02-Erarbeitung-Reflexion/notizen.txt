@@ -10,3 +10,4 @@ To-Dos:
 - Einmal die Publishenden und dann die Konsumierenden
 - Doppelte Python-Logik in "Klasse" zusammenlegen, um Copy-Paste zu vermeiden
 - ordentliches Logging in Microservices einbauen und nicht unnötig loggen
+- automatic order service ggf umbauen bzw erweitern, dass er auch die Bewegungen zwischen den Warenhäusern verarbeitet
