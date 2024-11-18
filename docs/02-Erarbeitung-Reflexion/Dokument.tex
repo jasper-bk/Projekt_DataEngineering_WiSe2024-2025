@@ -183,7 +183,7 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
 
     Eine Visualisierung ist in nachfolgender Abbildung \ref{fig:architekturentwurf} zu sehen.
 
-    \begin{figure}[H]
+    \begin{figure}[H] %To-Do: Grafik evtl weiter konkretisieren. Bisher nur Kopie aus der Konzeptionsphase
         \centering
         \includegraphics[width=1\textwidth]{assets/architekturentwurf.jpg}
         \caption{Architekturübersicht}
@@ -210,16 +210,18 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
     Dies ermöglicht es, die Infrastruktur flexibel an veränderte Anforderungen, wie etwa größere Datenvolumina, anzupassen.
 
     Besonderer Wert wird auf Datensicherheit und Datenschutz gelegt.
-    Die Kommunikation zwischen den Microservices erfolgt verschlüsselt, und rollenbasierte Zugriffskontrollen (RBAC) stellen sicher, dass nur autorisierte Entitäten Zugriff auf die Daten haben.
-    Zudem werden alle Datenflüsse umfassend dokumentiert, um den Richtlinien der Datenschutz-Grundverordnung (DSGVO) zu entsprechen.
+    Die Kommunikation zwischen den Microservices erfolgt verschlüsselt, und rollenbasierte Zugriffskontrollen (RBAC) stellen sicher, dass nur autorisierte Entitäten Zugriff auf die Daten haben. %Nochmal erläutern und ggf. verfizieren
+    Zudem werden alle Datenflüsse umfassend dokumentiert, um den Richtlinien der Datenschutz-Grundverordnung (DSGVO) zu entsprechen. % Evtl einfach einen Microservice für DSGVO Themen bauen
 
     Die Entwicklung der Infrastruktur basiert auf synthetischen Datenströmen, die typische Anwendungsszenarien wie Verkaufs- und Lagerbestandsdaten simulieren.
     Diese Datenströme werden mithilfe von Python-Skripten generiert und kontinuierlich in Kafka Topics publiziert.
     Die simulierten Daten dienen als Testbasis, um die Funktionalität der gesamten Pipeline unter realistischen Bedingungen zu validieren.
 
-    Der Quellcode der Infrastruktur wird in einem Git-Repository versioniert, um die Nachvollziehbarkeit und Reproduzierbarkeit sicherzustellen.
+    Der Quellcode der Infrastruktur, der Applikationen inkl. der Dokumentation wird in einem Git-Repository versioniert, um die Nachvollziehbarkeit und Reproduzierbarkeit sicherzustellen.
     Das Repository enthält alle relevanten Konfigurationsdateien, Python-Skripte und Helm-Charts, die für den Aufbau der Infrastruktur notwendig sind.
     Zusätzlich wird die Einhaltung bewährter Praktiken zur Versionskontrolle sichergestellt, um eine strukturierte Weiterentwicklung zu ermöglichen.
+    Das Repository ist über folgenden Link zugänglich:
+    \url{https://github.com/jasper-bk/Projekt_DataEngineering_WiSe2024-2025}. %To-Do: Sicherstellen, dass der Link auch verfügbar ist oder ggf. durch einen anderen Link ersetzen
 
     Erste Tests zeigen, dass das System in der Lage ist, große Datenmengen effizient zu verarbeiten und in Echtzeit bereitzustellen.
     Die Architektur erfüllt die Anforderungen an Zuverlässigkeit, Skalierbarkeit und Wartbarkeit und stellt eine robuste Grundlage für zukünftige Erweiterungen dar.
