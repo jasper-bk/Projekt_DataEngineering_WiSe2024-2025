@@ -40,4 +40,16 @@ services:
       context: ./automatic_order_microservice
       dockerfile: Containerfile
 
+  ## other microservices ##
+
+  # Data Governance
+
+  gdpr_microservice:
+    image: "docker.io/jaspilein/iu-data-engineering-gdpr_microservice:DEV"
+    build:
+      context: ./gdpr_microservice
+      dockerfile: Containerfile
+
+  # API Services
+
   # ...

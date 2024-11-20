@@ -222,4 +222,9 @@ applications:
 # Job configuration section #
 ##############################
 
-jobs: {}
+jobs:
+
+  gdpr-microservice:
+    image:
+      repository: jaspilein/iu-data-engineering-gdpr_microservice:DEV
+      tag: null

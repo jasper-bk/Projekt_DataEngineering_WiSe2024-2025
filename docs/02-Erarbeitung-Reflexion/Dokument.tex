@@ -71,6 +71,7 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
 \usepackage[english, ngerman]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{scrhack}
+\usepackage{dirtree}
 \usepackage{txfonts} % Use a Times-new-roman open-source clone
 
 
@@ -196,12 +197,14 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
     Die Daten werden in Kafka Topics geschrieben, von den zuständigen Microservices konsumiert und anschließend verarbeitet.
     Dabei wird keine zusätzliche Middleware wie Kafka Streams genutzt, sondern die gesamte Datenlogik ist direkt in den Python-Microservices implementiert.
 
-    Ein zentraler Microservice übernimmt die Aufnahme von simulierten Datenströmen, die Verkaufs- und Bestandsdaten repräsentieren.
+    Mehrere Microservices übernehmen die Aufgabe Datenströme zu simulieren, die Verkaufs- und Bestandsdaten repräsentieren.
+    Im Produktivbetrieb würden dise Microservices echte Daten aus den Fillialen und Lagerhäuser als Edge Nodes verarbeiten und an Kafka übergeben.
     Diese Daten werden direkt an Kafka Topics publiziert.
-    Weitere spezialisierte Microservices konsumieren diese Daten und führen Vorverarbeitungen durch, wie etwa Aggregationen und das Extrahieren relevanter Informationen.
+    Die simulierten Daten dienen als Testbasis, um die Funktionalität der gesamten Pipeline unter realistischen Bedingungen zu validieren.
+    Weitere spezialisierte Microservices konsumieren diese Daten und führen Tranformationen durch, wie etwa Aggregationen und das Extrahieren relevanter Informationen.
     Die Aggregationen erfolgen in zeitlich definierten Intervallen, um Echtzeitberichte bereitzustellen.
 
-    Die persistierten Daten werden in einer PostgreSQL-Datenbank gespeichert, die für eine effiziente Speicherung und Abfrage großer Datenmengen optimiert wurde.
+    Die stark konsuldierten und zu persistierenden Daten werden in einer PostgreSQL-Datenbank gespeichert, die für eine effiziente Speicherung und Abfrage großer Datenmengen optimiert ist.
     Die Übergabe der Daten an die Datenbank erfolgt durch einen dedizierten Microservice, der die Daten aus Kafka konsumiert, verarbeitet und in die entsprechenden Tabellen einfügt.
     Diese Struktur ermöglicht eine klare Trennung der Verantwortlichkeiten zwischen Datenaufnahme, Verarbeitung und Speicherung.
 
@@ -210,16 +213,14 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
     Dies ermöglicht es, die Infrastruktur flexibel an veränderte Anforderungen, wie etwa größere Datenvolumina, anzupassen.
 
     Besonderer Wert wird auf Datensicherheit und Datenschutz gelegt.
-    Die Kommunikation zwischen den Microservices erfolgt verschlüsselt, und rollenbasierte Zugriffskontrollen (RBAC) stellen sicher, dass nur autorisierte Entitäten Zugriff auf die Daten haben. %Nochmal erläutern und ggf. verfizieren
-    Zudem werden alle Datenflüsse umfassend dokumentiert, um den Richtlinien der Datenschutz-Grundverordnung (DSGVO) zu entsprechen. % Evtl einfach einen Microservice für DSGVO Themen bauen
-
-    Die Entwicklung der Infrastruktur basiert auf synthetischen Datenströmen, die typische Anwendungsszenarien wie Verkaufs- und Lagerbestandsdaten simulieren.
-    Diese Datenströme werden mithilfe von Python-Skripten generiert und kontinuierlich in Kafka Topics publiziert.
-    Die simulierten Daten dienen als Testbasis, um die Funktionalität der gesamten Pipeline unter realistischen Bedingungen zu validieren.
+    Die Kommunikation zwischen den Microservices wird im Produktivbetrieb verschlüsselt erfolgen, und rollenbasierte Zugriffskontrollen (RBAC) stellen sicher, dass nur autorisierte Entitäten Zugriff auf die Daten haben. %Nochmal erläutern und ggf. verfizieren
+    Schützenswerte Daten, die nicht persistiert werden müssen, werden durch die Kafka Retention automatisch innerhalb kürzerer Zeit gelöscht und müssen nicht gesondert im Rahmen der DSGVO behandelt werden.
+    Zudem werden alle Datenflüsse umfassend dokumentiert, um den Richtlinien der Datenschutz-Grundverordnung (DSGVO) zu entsprechen.
+    Für die persistenten Daten und die Einhaltung der DSGVO gibt es speziell einen Microservice, der die Aufgabe der Einhaltung übernimmt.
 
     Der Quellcode der Infrastruktur, der Applikationen inkl. der Dokumentation wird in einem Git-Repository versioniert, um die Nachvollziehbarkeit und Reproduzierbarkeit sicherzustellen.
     Das Repository enthält alle relevanten Konfigurationsdateien, Python-Skripte und Helm-Charts, die für den Aufbau der Infrastruktur notwendig sind.
-    Zusätzlich wird die Einhaltung bewährter Praktiken zur Versionskontrolle sichergestellt, um eine strukturierte Weiterentwicklung zu ermöglichen.
+
     Das Repository ist über folgenden Link zugänglich:
     \url{https://github.com/jasper-bk/Projekt_DataEngineering_WiSe2024-2025}. %To-Do: Sicherstellen, dass der Link auch verfügbar ist oder ggf. durch einen anderen Link ersetzen
 
