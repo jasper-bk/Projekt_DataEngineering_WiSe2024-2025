@@ -225,6 +225,10 @@ applications:
 jobs:
 
   gdpr-microservice:
-    image:
-      repository: jaspilein/iu-data-engineering-gdpr_microservice:DEV
-      tag: null
+    schedule: "0 1 * * *" # every day at 1 am
+    restartPolicy: Never
+    workdir: "/tmp/" #not needed right now
+    spec:
+      image:
+        repository: jaspilein/iu-data-engineering-gdpr_microservice:DEV
+        tag: null

@@ -90,12 +90,6 @@ spec:
               {{- if $cronjob.workdir }}
               - name: workdir
                 mountPath: {{ $cronjob.workdir }}
-              - name: mount-conf
-                mountPath: {{ (printf "%s%s" $cronjob.workdir "/cfg/" ) }}
-                readOnly: true
-              - name: mount-global-conf
-                mountPath: {{ $.Values.global.defaultConfLocation }}
-                readOnly: true
               {{- end }}
               {{- if $.Values.global.extraVolumeMounts }}
                 {{- toYaml $.Values.global.extraVolumeMounts | nindent 14 }}
@@ -119,13 +113,6 @@ spec:
           {{- end }}
           {{- if $cronjob.workdir }}
           - name: workdir
-            {{- /* #Possible To-Do: Use something else than default emptydir */}}
-          - name: mount-conf
-            secret:
-              secretName: {{ $.Release.Name }}-{{ $jobname }}-conf-secret
-          - name: mount-global-conf
-            secret:
-              secretName: {{ $.Release.Name }}-global-conf-secret
           {{- end }}
 
 ---
