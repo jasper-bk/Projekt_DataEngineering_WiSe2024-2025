@@ -230,8 +230,9 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
 
     Zur Einrichtung der Umgebung wird ein Kubernetes-Cluster, die Software Kubectl und Helm benötigt.
     Zur lokalen Einrichtung bietet sich die einfach einzurichtende Kubernetes Open-Source Lösung K3S von SUSE an.
-    Sind Kubernetes-Cluster, Kubectl und Helm eingerichtet, lässt sich die gesamte Software mit einem Befehl mit dem Repository-Root als Arbeitsverzeichnis wie folgt ausrollen.
-    Der Befehl zur Installation sieht wie folgt aus:\\
+    Sind Kubernetes-Cluster, Kubectl und Helm eingerichtet, lässt sich die gesamte Software mit zwei Befehlen aus dem Repository-Root als Arbeitsverzeichnis wie folgt ausrollen.
+    Die Befehle zur Installation sehen wie folgt aus:\\
+    % Add dependency update stage
     \enquote{\lstinline[columns=fixed]{helm install my-release app/helm-chart-deployment/}}\\ %my-release nochmal umbenennen
     Nach Ausführung ist die gesamte Infrastruktur verfügbar und einsatzbereit.
 

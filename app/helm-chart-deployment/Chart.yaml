@@ -1,8 +1,8 @@
 apiVersion: v2
-name: custom-helm
+name: data-engineering-helm
 version: 1.0.0
 appVersion: 1.0.0
-description: Custom Helm Chart
+description: Helm Chart for Data Engineering
 keywords:
 - kubernetes
 maintainers:
@@ -21,3 +21,8 @@ dependencies:
   - name: akhq
     version: "0.25.1"
     repository: "https://akhq.io/"
+
+  # Custom helm chart to include all microservices
+  - name: custom-helm-chart
+    version: 1.0.0
+    # repository: "file://charts/custom-helm-chart" #only needed if stored somewhere else than the fodler charts

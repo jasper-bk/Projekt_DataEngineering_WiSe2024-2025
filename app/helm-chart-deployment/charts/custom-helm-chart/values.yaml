@@ -1,0 +1,90 @@
+##############
+# Helm chart #
+##############
+# Introduction:
+# The helm chart currently consists of two main sections: global and applications.
+# "global" will be applied to all services
+# the entries in "applications" will only be applied to single applications
+# If you want to add a service or alter the configuration of one, head directly in to the "applications" section
+#
+
+# This setting section will apply to all services (only change if absolutley necessary)
+global:
+  image:
+
+    # maybe change to a different registry provide. for example quay.io or maybe a local one which is running in parallel outside the cluster
+    imageRegistry: "docker.io"
+    #imagePullSecrets:
+    #  - private-registry-secret
+    pullPolicy: Always
+
+    # can be defined to use it on all services (except those were the value is not null)
+    # can be overriden via: helm ... --set global.image.tag=-<your-tag>
+    tag: DEV
+
+  # Required to disable running services as root user
+  securityContext:
+    fsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+
+  # Default resources settings for service containers # Can be overridden in each serivce
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "20m"
+    limits:
+      memory: "1024Mi"
+      cpu: "400m"
+
+  updateStrategy:
+    type: RollingUpdate #Possible options: Recreate, RollingUpdate
+
+  # Seconds to wait for stopping services without killing it with force
+  terminationGracePeriodSeconds: 60
+
+  # This environment variables will be set in all services
+  # Use extraEnv in the service section to add service specific environment variables
+  #env: {}
+
+
+  # can be used to setup container environments
+  initContainers:
+    - name: init-environment
+      image: docker.io/busybox:1.28
+      command: ['sh', '-c',
+        'echo "Nothing to do yet!"']
+
+  # configmaps which will be created independently from the normal service cfg folder
+  extraConfigurationConfigMaps: {}
+
+  # secrets which will be created independently from the normal service cfg folder structure
+  extraConfigurationSecrets: {}
+
+  #Additional persistent volume claims which will be created independently
+  extraPersistentVolumeClaims: {}
+
+  # will be append to the regular volumes in each service
+  extraVolumes: {}
+
+  extraVolumeMounts: {}
+
+  # Probe to check health/liveness of applications
+  livenessProbe: {}
+
+
+  # Probe to check ready status of applications
+  readinessProbe: {}
+
+  # Sidecars are container running next to the main container
+  sidecars: {}
+
+#################################
+# Service configuration section #
+#################################
+
+# individual settings for single service applications
+applications: {}
+
+jobs: {}
