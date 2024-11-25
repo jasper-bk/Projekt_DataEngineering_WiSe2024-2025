@@ -52,6 +52,11 @@ akhq:
               bootstrap.servers: my-release-kafka:9092 # has too match with the name of the release too: <release-name>-kafka:9092
               security.protocol: PLAINTEXT
 
+  service:
+    enabled: true
+    type: LoadBalancer
+    port: 8080
+
 
 postgresql:
   auth:
@@ -136,6 +141,13 @@ custom-helm-chart:
     automatic-order-microservice:
       image:
         repository: jaspilein/iu-data-engineering-automatic_order_microservice
+        tag: null
+      replicas: 1
+      workdir: "/tmp/" #not needed right now
+
+    kafka-db-mirror-microservice:
+      image:
+        repository: jaspilein/iu-data-engineering-kafka_db_mirror_microservice
         tag: null
       replicas: 1
       workdir: "/tmp/" #not needed right now

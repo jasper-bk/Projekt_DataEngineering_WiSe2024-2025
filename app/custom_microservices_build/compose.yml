@@ -42,6 +42,12 @@ services:
 
   ## other microservices ##
 
+  kafka_db_mirror_microservice:
+    image: "docker.io/jaspilein/iu-data-engineering-kafka_db_mirror_microservice:DEV"
+    build:
+      context: ./kafka_db_mirror_microservice
+      dockerfile: Containerfile
+
   # Data Governance
 
   gdpr_microservice:

@@ -198,7 +198,7 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
     Dabei wird keine zusätzliche Middleware wie Kafka Streams genutzt, sondern die gesamte Datenlogik ist direkt in den Python-Microservices implementiert.
 
     Mehrere Microservices übernehmen die Aufgabe Datenströme zu simulieren, die Verkaufs- und Bestandsdaten repräsentieren.
-    Im Produktivbetrieb würden dise Microservices echte Daten aus den Fillialen und Lagerhäuser als Edge Nodes verarbeiten und an Kafka übergeben.
+    Im Produktivbetrieb würden dise Microservices echte Daten aus den Fillialen und Lagerhäuser auf Edge Nodes verarbeiten und an Kafka übergeben.
     Diese Daten werden direkt an Kafka Topics publiziert.
     Die simulierten Daten dienen als Testbasis, um die Funktionalität der gesamten Pipeline unter realistischen Bedingungen zu validieren.
     Weitere spezialisierte Microservices konsumieren diese Daten und führen Tranformationen durch, wie etwa Aggregationen und das Extrahieren relevanter Informationen.
@@ -226,15 +226,23 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
 
     Erste Tests zeigen, dass das System in der Lage ist, große Datenmengen effizient zu verarbeiten und in Echtzeit bereitzustellen.
     Die Architektur erfüllt die Anforderungen an Zuverlässigkeit, Skalierbarkeit und Wartbarkeit und stellt eine robuste Grundlage für zukünftige Erweiterungen dar.
-    Das Optimierungspotenzial liegt insbesondere in der Ressourcennutzung des Kubernetes-Clusters, um die Performance weiter zu verbessern.
+    Das Optimierungspotenzial liegt insbesondere in der Ressourcennutzung des Kubernetes-Clusters, um die Performance zu verbessern und zukünftige Kosten zu senken.
 
     Zur Einrichtung der Umgebung wird ein Kubernetes-Cluster, die Software Kubectl und Helm benötigt.
     Zur lokalen Einrichtung bietet sich die einfach einzurichtende Kubernetes Open-Source Lösung K3S von SUSE an.
     Sind Kubernetes-Cluster, Kubectl und Helm eingerichtet, lässt sich die gesamte Software mit zwei Befehlen aus dem Repository-Root als Arbeitsverzeichnis wie folgt ausrollen.
     Die Befehle zur Installation sehen wie folgt aus:\\
     % Add dependency update stage
-    \enquote{\lstinline[columns=fixed]{helm install my-release app/helm-chart-deployment/}}\\ %my-release nochmal umbenennen
+    \begin{lstlisting}
+        helm dependency update app/helm-chart-deployment/
+        helm install my-release app/helm-chart-deployment/
+    \end{lstlisting} %my-release nochmal umbenennen
+
+    Der erste Befehl lädt die Abhängigkeiten runter und der zweite Befehl rollt die Applikationen auf das verbundene Cluster aus.
     Nach Ausführung ist die gesamte Infrastruktur verfügbar und einsatzbereit.
+    Mit dem Kafka-Broker kann über Port 9094 von außen kommuniziert werden, um von außen Daten zu publizieren oder zu konsumieren.
+    Außerdem können Kafka, dessen Topics und die Daten über Port 8080 mithilfe des Tools AKHQ im Browser inspiziert und überwacht werden.
+    Damit lässt
 
 % To-Dos:
 % Nochmal klären, ob auch hier mehr als eine halbe Seite Okay ist.
