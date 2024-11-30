@@ -22,16 +22,10 @@ services:
 
   # microservices consuming from kafka
 
-  status_information_microservice:
-    image: "docker.io/jaspilein/iu-data-engineering-status_information_microservice:DEV"
+  aggregation_reporting_microservice:
+    image: "docker.io/jaspilein/iu-data-engineering-aggregation_reporting_microservice:DEV"
     build:
-      context: ./status_information_microservice
-      dockerfile: Containerfile
-
-  daily_aggregation_reporting_microservice:
-    image: "docker.io/jaspilein/iu-data-engineering-daily_aggregation_reporting_microservice:DEV"
-    build:
-      context: ./daily_aggregation_reporting_microservice
+      context: ./aggregation_reporting_microservice
       dockerfile: Containerfile
 
   automatic_order_microservice:

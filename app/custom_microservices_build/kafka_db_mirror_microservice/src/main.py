@@ -4,8 +4,9 @@ import os
 import json
 import psycopg2
 from kafka import KafkaConsumer, KafkaAdminClient
+from kafka.errors import KafkaError
 from datetime import datetime
-from time import sleep
+import time
 
 # Kafka and PostgreSQL configuration. Loaded from environment variables. Will be defaulted, if null
 KAFKA_BROKER = os.getenv('KAFKA_BROKER', 'localhost:9094')
@@ -19,6 +20,26 @@ POSTGRES_DB = os.getenv('POSTGRES_DB', 'postgres')
 POSTGRES_USER = os.getenv('POSTGRES_USER', 'application-user')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD', 'no-secret-default-password')
 DBLESS_MODE = os.getenv('DBLESS_MODE', 'true').lower() == 'false'
+
+# Function to check Kafka connection
+def check_kafka_connection(broker, timeout=60, interval=5):
+    start_time = time.time()
+    while True:
+        try:
+            # Try connecting to the Kafka broker
+            admin_client = KafkaAdminClient(bootstrap_servers=[broker])
+            admin_client.list_topics()
+            admin_client.close()
+            print(f"Connected to Kafka at {broker}")
+            return True
+        except KafkaError as e:
+            # If Kafka is not reachable, wait and retry
+            elapsed_time = time.time() - start_time
+            if elapsed_time > timeout:
+                print(f"Could not connect to Kafka at {broker} within {timeout} seconds.")
+                return False
+            print(f"Kafka not reachable, retrying in {interval} seconds...")
+            time.sleep(interval)
 
 # Connect to PostgreSQL (if not in DBLESS_MODE)
 def connect_to_postgres():
@@ -141,7 +162,7 @@ def consume_and_process():
             else:
                 print("No messages found in this poll cycle. Checking again.")
 
-            sleep(1)  # Small sleep to reduce CPU usage during polling
+            time.sleep(1)  # Small sleep to reduce CPU usage during polling
     except KeyboardInterrupt:
         print("Consumption interrupted.")
     finally:
@@ -152,4 +173,8 @@ def consume_and_process():
         print("Connections closed.")
 
 if __name__ == "__main__":
-    consume_and_process()
+    # Ensure connection to Kafka
+    if not check_kafka_connection(KAFKA_BROKER):
+        print("Exiting due to inability to connect to Kafka.")
+    else:
+        consume_and_process()

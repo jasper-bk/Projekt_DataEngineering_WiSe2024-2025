@@ -6,11 +6,32 @@ from kafka import KafkaConsumer, KafkaAdminClient
 from datetime import datetime
 from time import sleep
 import random
+import time
+from kafka.errors import KafkaError
 
-# Kafka and PostgreSQL configuration
+# Kafka configuration
 KAFKA_BROKER = os.getenv('KAFKA_BROKER', 'localhost:9094')
 TOPIC = os.getenv('KAFKA_TOPIC', 'inbound_checkout')
 
+# Function to check Kafka connection
+def check_kafka_connection(broker, timeout=60, interval=5):
+    start_time = time.time()
+    while True:
+        try:
+            # Try connecting to the Kafka broker
+            admin_client = KafkaAdminClient(bootstrap_servers=[broker])
+            admin_client.list_topics()
+            admin_client.close()
+            print(f"Connected to Kafka at {broker}")
+            return True
+        except KafkaError as e:
+            # If Kafka is not reachable, wait and retry
+            elapsed_time = time.time() - start_time
+            if elapsed_time > timeout:
+                print(f"Could not connect to Kafka at {broker} within {timeout} seconds.")
+                return False
+            print(f"Kafka not reachable, retrying in {interval} seconds...")
+            time.sleep(interval)
 
 # Check if the Kafka topic exists
 def check_topic_exists():
@@ -27,6 +48,33 @@ def check_topic_exists():
         return False
     finally:
         admin_client.close()
+
+# Placeholder for data validation (this would be where real validation logic goes)
+def validate_transaction_data(transaction_data):
+    # Simulate data validation
+    print(f"Validating transaction data for transaction ID: {transaction_data['transaction_id']}")
+    # Placeholder logic (assuming data is always valid)
+    return True
+
+# Placeholder for inventory check and API call if threshold is not met
+def check_inventory_and_order(transaction_data):
+    print(f"Checking inventory for transaction {transaction_data['transaction_id']}...")
+    # Placeholder: Simulate inventory check
+    inventory_level = random.randint(0, 10)  # Random inventory level for simulation
+
+    # Check if the inventory is below a threshold (e.g., less than 5 items in stock)
+    if inventory_level < 5:
+        print(f"Inventory below threshold for product {transaction_data['items'][0]['product_id']}. Placing order.")
+        order_new_inventory(transaction_data)
+    else:
+        print(f"Inventory sufficient for product {transaction_data['items'][0]['product_id']}. No order needed.")
+
+# Placeholder for API call to order new inventory
+def order_new_inventory(transaction_data):
+    print(f"Ordering new inventory for product {transaction_data['items'][0]['product_id']}...")
+    # Placeholder for API logic (e.g., sending a request to an external service)
+    # Simulate successful ordering
+    print(f"Order placed successfully for product {transaction_data['items'][0]['product_id']}.")
 
 # Consume and process messages from Kafka
 def consume_and_process():
@@ -56,23 +104,29 @@ def consume_and_process():
                     for message in messages:
                         transaction_data = message.value
 
-                        # To-Do: Perform data validation
+                        # Data validation
+                        if validate_transaction_data(transaction_data):
+                            print(f"Transaction data valid: {transaction_data['transaction_id']}")
 
-                        # To-o: Check inventory and make a api call to order new stuff if the treshold is not met
+                            # Inventory check and order placement if threshold is not met
+                            check_inventory_and_order(transaction_data)
+                        else:
+                            print(f"Invalid transaction data: {transaction_data['transaction_id']}")
 
-                        # To-Do: Make an api call
             else:
                 print("No messages found in this poll cycle. Checking again.")
 
             sleep(1)  # Small sleep to reduce CPU usage during polling
+
     except KeyboardInterrupt:
         print("Consumption interrupted.")
     finally:
-        # Close connections if connected to PostgreSQL
         consumer.close()
-        if conn:
-            conn.close()
         print("Connections closed.")
 
 if __name__ == "__main__":
-    consume_and_process()
+    # Ensure connection to Kafka
+    if not check_kafka_connection(KAFKA_BROKER):
+        print("Exiting due to inability to connect to Kafka.")
+    else:
+        consume_and_process()
