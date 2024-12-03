@@ -4,10 +4,9 @@ Erst Lenses als Management Tool genutzt werden sollte, aber wegen der Lizenz dan
 
 
 To-Dos:
-- Helm Chart splitten
-- Einmal für Kafka und AKHQ
-- und dann zwei Charts für die Services
-- Einmal die Publishenden und dann die Konsumierenden
 - Doppelte Python-Logik in "Klasse" zusammenlegen, um Copy-Paste zu vermeiden
 - ordentliches Logging in Microservices einbauen und nicht unnötig loggen
-- automatic order service ggf umbauen bzw erweitern, dass er auch die Bewegungen zwischen den Warenhäusern verarbeitet
+- automatic order service, daten in postgresql reinschreiben lassen
+Zu Klären:
+    - Konsumiert der Service aus allen inbound topics oder nur bestimmten?
+    - Soll das Inventar wirklich in der Datenbank verwaltet werden?

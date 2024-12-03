@@ -6,7 +6,8 @@ import random
 import datetime
 import time
 import uuid
-from kafka import KafkaProducer, KafkaAdminClient, KafkaError
+from kafka import KafkaProducer, KafkaAdminClient
+from kafka.errors import KafkaError
 from kafka.admin import NewTopic
 
 # Set default Kafka configuration, override with environment variables if available
