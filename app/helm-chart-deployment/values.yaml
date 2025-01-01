@@ -115,14 +115,14 @@ custom-helm-chart:
       image:
         repository: jaspilein/iu-data-engineering-data_ingestion_checkout_microservice
         tag: null
-      replicas: 0 #start with zero instances. Should be scales manually
+      replicas: 1
       workdir: "/tmp/" #not needed right now
 
     data-ingestion-warehouse-microservice:
       image:
         repository: jaspilein/iu-data-engineering-data_ingestion_warehouse_microservice
         tag: null
-      replicas: 0 #start with zero instances. Should be scales manually
+      replicas: 1
       workdir: "/tmp/" #not needed right now
 
 

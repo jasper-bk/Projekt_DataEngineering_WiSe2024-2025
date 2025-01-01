@@ -3,7 +3,7 @@ K3S für das Single-Node Cluster (während Entwicklung)
 Erst Lenses als Management Tool genutzt werden sollte, aber wegen der Lizenz dann doch zu AKHQ gewechselt wurde
 
 
-To-Dos:
+Optionale To-Dos:
 - Doppelte Python-Logik in "Klasse" zusammenlegen, um Copy-Paste zu vermeiden
 - ordentliches Logging in Microservices einbauen und nicht unnötig loggen
 - automatic order service, daten in postgresql reinschreiben lassen

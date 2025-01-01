@@ -45,7 +45,8 @@ def main():
         print("Failed to connect to PostgreSQL. Exiting.")
         return
 
-        # To-Do: Run delete statements in direction of PostgreSQL to delete data which is no longer allowed to have
+    # No business logic is built into the project as this is not sufficiently defined
+    # To-Do if business logic is sufficiently defined : Run delete statements in direction of PostgreSQL to delete data which is no longer allowed to have
 
 if __name__ == "__main__":
     main()

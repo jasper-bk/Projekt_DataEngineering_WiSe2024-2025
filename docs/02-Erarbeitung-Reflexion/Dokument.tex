@@ -240,16 +240,33 @@ toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
 
     Der erste Befehl lädt die Abhängigkeiten runter und der zweite Befehl rollt die Applikationen auf das verbundene Cluster aus.
     Nach Ausführung ist die gesamte Infrastruktur verfügbar und einsatzbereit.
+
     Mit dem Kafka-Broker kann über Port 9094 von außen kommuniziert werden, um von außen Daten zu publizieren oder zu konsumieren.
     Außerdem können Kafka, dessen Topics und die Daten über Port 8080 mithilfe des Tools AKHQ im Browser inspiziert und überwacht werden.
-    Damit lässt
+    Zudem ist auch die PostgreSQL-Datenbank mit den zu persistierenden Daten über Port 5432 von außen erreichbar.
+
+    Im lokalen Betrieb über die Kubernetes Open-Source Lösung K3S mit nur einem Node können alle diese Ports vom localhost abgerufen werden.
+    Damit ergeben sich folgende URLs, um auf das System zu zugreifen:
+    \begin{itemize}
+        \item Kafka-Monitoring: \url{http://localhost:8080/}
+        \item Datenbank: \url{jdbc:postgresql://localhost:5432/postgres }
+        \item Kafka-Broker: \url{localhost:9094}
+    \end{itemize}
+
+    Der externe Zugriff zur Datenbank und dem Kafka-Broker ist im Rahmen der Projektarbeit nur zum Debugging interessant.
+    Wichtiger ist das Kafka-Monitoring, um die Datenströme nachzuvollziehen können.
+    Sobald die Applikationen ausgerollt sind, werden direkt Daten erzeugt, die wiederrum unmittelbar verarbeitet werden und dessen Verarbeitung im Monitoring nachvollzogen werden kann.
+
+    Bei dem Projekt handelt es sich vor um eine eingeschränkt funktionsfähige Blaupause.
+    Es werden Datenströme erzeugt, die zuverlässig, effizient und wartbar verarbeitet werden, um den Anforderungen im höchstem Maß gerecht zu werden.
+    Eine echte und in sich schlüssige Business-Logik ist aufgrund des großen Anwendungsfalls und der dahinterliegenden Komplexität nicht oder nur in geringen Teilen abgebildet.
 
 % To-Dos:
 % Nochmal klären, ob auch hier mehr als eine halbe Seite Okay ist.
 % Code noch sinnvoll finalisieren. Tabellen werden nur bedingt genutzt und die "Business"-Logik selbst ist noch fraglich
 %   - Evtl auch klären wie wichtig die Logik selbst ist, ob z. B. auch Platzhalter zulässig sind
 % Generell klären, wie umfangreich der Text für die zweite Phase sein soll.
-%   - Falls mehr Details erwünsch sind, dann auch mehr auf den Code, die Topics und den Aufbau des Helm-Charts eingehen
+%   - Falls mehr Details erwünscht sind, dann auch mehr auf den Code, die Topics und den Aufbau des Helm-Charts eingehen
 % Thema Datensicherheit und Datenschutz besser fokussieren oder zumindest klären ... Wie viel ist wirklich schon notwendig. Reichen auch Platzhalter? DSGVO Microservice z. B. ...
 
 %Folgende Fragen klären:
