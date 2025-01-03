@@ -10,7 +10,7 @@ import time
 
 # Kafka and PostgreSQL configuration. Loaded from environment variables. Will be defaulted, if null
 KAFKA_BROKER = os.getenv('KAFKA_BROKER', 'localhost:9094')
-TOPICS = os.getenv('KAFKA_TOPICS', 'inbound_checkout,warehouse_inventory').split(',')
+TOPICS = os.getenv('KAFKA_TOPICS', 'aggregated_checkout').split(',')
 CONSUMER_GROUP = os.getenv('CONSUMER_GROUP', 'kafka_db_mirror')
 
 

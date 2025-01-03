@@ -2,7 +2,7 @@
 
 import os
 import json
-from kafka import KafkaConsumer, KafkaAdminClient
+from kafka import KafkaConsumer, KafkaProducer, KafkaAdminClient
 from datetime import datetime
 from time import sleep
 import random
@@ -12,6 +12,7 @@ from kafka.errors import KafkaError
 # Kafka configuration
 KAFKA_BROKER = os.getenv('KAFKA_BROKER', 'localhost:9094')
 TOPIC = os.getenv('KAFKA_TOPIC', 'inbound_checkout')
+LOG_TOPIC = os.getenv('OUTBOUND_KAFKA_LOG_TOPIC', 'outbound_order')
 
 # Function to check Kafka connection
 def check_kafka_connection(broker, timeout=60, interval=5):
@@ -57,7 +58,7 @@ def validate_transaction_data(transaction_data):
     return True
 
 # Placeholder for inventory check and API call if threshold is not met
-def check_inventory_and_order(transaction_data):
+def check_inventory_and_order(transaction_data, producer, transaction_key):
     print(f"Checking inventory for transaction {transaction_data['transaction_id']}...")
     # Placeholder: Simulate inventory check
     inventory_level = random.randint(0, 10)  # Random inventory level for simulation
@@ -65,16 +66,50 @@ def check_inventory_and_order(transaction_data):
     # Check if the inventory is below a threshold (e.g., less than 5 items in stock)
     if inventory_level < 5:
         print(f"Inventory below threshold for product {transaction_data['items'][0]['product_id']}. Placing order.")
-        order_new_inventory(transaction_data)
+        order_new_inventory(transaction_data, producer, transaction_key)
     else:
         print(f"Inventory sufficient for product {transaction_data['items'][0]['product_id']}. No order needed.")
 
 # Placeholder for API call to order new inventory
-def order_new_inventory(transaction_data):
+def order_new_inventory(transaction_data, producer, transaction_key):
     print(f"Ordering new inventory for product {transaction_data['items'][0]['product_id']}...")
+
+    order_amount = random.randint(0, 10)  # Random order amount for simulation
+
     # Placeholder for API logic (e.g., sending a request to an external service)
+
+    provider="Company XYZ"
+
     # Simulate successful ordering
-    print(f"Order placed successfully for product {transaction_data['items'][0]['product_id']}.")
+    print(f"Order placed successfully for product {transaction_data['items'][0]['product_id']} on {provider}")
+
+    stream_data = {
+        "ordered_product" : str(transaction_data['items'][0]['product_id']),
+        "provider": provider,
+        "order_amount" : order_amount
+    }
+
+    producer.send(LOG_TOPIC, key=transaction_key, value=stream_data)
+
+
+# Function to ensure that a topic exists
+def ensure_topic_exists(topic_name):
+    try:
+        admin_client = KafkaAdminClient(bootstrap_servers=[KAFKA_BROKER])
+        topics = admin_client.list_topics()
+
+        if topic_name not in topics:
+            print(f"Topic '{topic_name}' does not exist. Creating topic...")
+            from kafka.admin import NewTopic
+            topic = NewTopic(name=topic_name, num_partitions=1, replication_factor=1)
+            admin_client.create_topics([topic])
+            print(f"Topic '{topic_name}' created successfully.")
+        else:
+            print(f"Topic '{topic_name}' already exists.")
+        admin_client.close()
+    except Exception as e:
+        print(f"Error while ensuring topic exists: {e}")
+        raise
 
 # Consume and process messages from Kafka
 def consume_and_process():
@@ -82,6 +117,8 @@ def consume_and_process():
     if not check_topic_exists():
         print("Exiting as the topic does not exist.")
         return
+
+    ensure_topic_exists(LOG_TOPIC)
 
     # Initialize Kafka consumer
     consumer = KafkaConsumer(
@@ -93,6 +130,18 @@ def consume_and_process():
         group_id=f'transaction_group'
     )
 
+    # Initialize Kafka producer
+    producer = KafkaProducer(
+        bootstrap_servers=[KAFKA_BROKER],
+        key_serializer=lambda k: str(k).encode('utf-8'),
+        value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+        acks=1,
+        linger_ms=10,
+        batch_size=16384,
+        request_timeout_ms=60000,
+        retries=3
+    )
+
     print("Started consuming messages from Kafka...")
 
     try:
@@ -102,6 +151,7 @@ def consume_and_process():
             if message_batch:
                 for tp, messages in message_batch.items():
                     for message in messages:
+                        transaction_key = message.key.decode("utf-8") #bytes object to str
                         transaction_data = message.value
 
                         # Data validation
@@ -109,7 +159,7 @@ def consume_and_process():
                             print(f"Transaction data valid: {transaction_data['transaction_id']}")
 
                             # Inventory check and order placement if threshold is not met
-                            check_inventory_and_order(transaction_data)
+                            check_inventory_and_order(transaction_data, producer, transaction_key)
                         else:
                             print(f"Invalid transaction data: {transaction_data['transaction_id']}")
 

@@ -149,6 +149,9 @@ custom-helm-chart:
       replicas: 1
       workdir: "/tmp/" #not needed right now
 
+      extraEnv:
+        - name: KAFKA_AGGREGATED_TOPIC
+          value: "aggregated_checkout,outbound_order,inboud_warehouse_inventory_movements"
 
   jobs:
 

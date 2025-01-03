@@ -12,7 +12,7 @@ from kafka.admin import NewTopic
 
 # Set default Kafka configuration, override with environment variables if available
 KAFKA_BROKER = os.getenv('KAFKA_BROKER', 'localhost:9094')
-TOPIC = os.getenv('KAFKA_TOPIC', 'warehouse_inventory')
+TOPIC = os.getenv('KAFKA_TOPIC', 'inboud_warehouse_inventory_movements')
 
 # Sample data for warehouses and items
 warehouses = [
